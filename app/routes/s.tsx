@@ -48,7 +48,7 @@ export default function SharePage({ loaderData }: Route.ComponentProps) {
             <Editor editable={false} content={share.content as Content} />
           </main>
           <aside>
-            <div className="flex flex-col justify-between gap-4 font-mono text-xs text-zinc-900 sm:flex-row dark:text-zinc-200">
+            <div className="flex flex-col justify-between gap-4 text-xs text-zinc-900 sm:flex-row dark:text-zinc-200">
               <div>
                 <div title={share.expiresAt} className="font-bold">
                   Expires{" "}

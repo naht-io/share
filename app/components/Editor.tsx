@@ -51,8 +51,6 @@ export interface EditorHandle {
 
 export function Editor(props: EditorProps) {
   const editor = useEditor({
-    // The app server-renders by default; defer editor creation to the client to
-    // avoid hydration mismatches (React Router framework mode runs on the server).
     immediatelyRender: false,
     editorProps: {
       attributes: {
@@ -104,7 +102,22 @@ export function Editor(props: EditorProps) {
     bubbleMenuRef.current?.setAttribute("tabindex", "-1");
   }, [editor]);
 
-  if (!editor) return null;
+  if (!editor) {
+    return (
+      <div className="p-4 md:p-8">
+        {(props.editable ?? true) ? (
+          <span className="text-zinc-500 dark:text-zinc-400">
+            Share something with the world...
+          </span>
+        ) : (
+          <div className="space-y-3 animate-pulse">
+            <div className="rounded-full w-full h-4 bg-zinc-200 dark:bg-zinc-700"></div>
+            <div className="rounded-full w-full h-4 bg-zinc-200 dark:bg-zinc-700"></div>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <>

@@ -55,17 +55,29 @@ export default function Index() {
             <Select.Trigger></Select.Trigger>
             <Select.Popover>
               <Select.List>
-                <Select.Item id={ShareExpiry.TOMORROW}>Expire tomorrow</Select.Item>
-                <Select.Item id={ShareExpiry.THREE_DAYS}>Expire in 3 days</Select.Item>
-                <Select.Item id={ShareExpiry.ONE_WEEK}>Expire in 1 week</Select.Item>
-                <Select.Item id={ShareExpiry.ONE_MONTH}>Expire in 1 month</Select.Item>
+                <Select.Item id={ShareExpiry.TOMORROW}>
+                  Expire tomorrow
+                </Select.Item>
+                <Select.Item id={ShareExpiry.THREE_DAYS}>
+                  Expire in 3 days
+                </Select.Item>
+                <Select.Item id={ShareExpiry.ONE_WEEK}>
+                  Expire in 1 week
+                </Select.Item>
+                <Select.Item id={ShareExpiry.ONE_MONTH}>
+                  Expire in 1 month
+                </Select.Item>
                 <Select.Item id={ShareExpiry.NEVER} isDisabled={true}>
                   Never expire
                 </Select.Item>
               </Select.List>
             </Select.Popover>
           </Select>
-          <Button className="inline-flex gap-1" type="submit" isDisabled={isEmpty}>
+          <Button
+            className="inline-flex gap-1"
+            type="submit"
+            isDisabled={isEmpty}
+          >
             Share
             <MoveUpRightIcon className="size-4" />
           </Button>

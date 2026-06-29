@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import { NavLink } from "react-router";
 
 import { Editor } from "~/components/Editor";
-import { db } from "~/db/db";
+import { db } from "~/db";
 import { shareTable } from "~/db/schema";
 
 import type { Route } from "./+types/s";
@@ -31,8 +31,8 @@ export async function loader({ params }: Route.LoaderArgs) {
   return {
     data: {
       content: share.content,
-      created_at: share.createdAt.toISOString(),
-      expires_at: share.expiresAt.toISOString(),
+      createdAt: share.createdAt.toISOString(),
+      expiresAt: share.expiresAt.toISOString(),
     },
   };
 }
@@ -50,13 +50,13 @@ export default function SharePage({ loaderData }: Route.ComponentProps) {
           <aside>
             <div className="flex flex-col justify-between gap-4 font-mono text-xs text-zinc-900 sm:flex-row dark:text-zinc-200">
               <div>
-                <div title={share.expires_at} className="font-bold">
+                <div title={share.expiresAt} className="font-bold">
                   Expires{" "}
-                  {formatDistanceToNow(share.expires_at, { addSuffix: true })}
+                  {formatDistanceToNow(share.expiresAt, { addSuffix: true })}
                 </div>
-                <div title={share.created_at}>
+                <div title={share.createdAt}>
                   Created{" "}
-                  {formatDistanceToNow(share.created_at, { addSuffix: true })}
+                  {formatDistanceToNow(share.createdAt, { addSuffix: true })}
                 </div>
               </div>
               <div className="text-right">

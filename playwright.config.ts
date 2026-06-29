@@ -1,7 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const PORT = 5173;
-const baseURL = `http://localhost:${PORT}`;
+const baseURL = `http://localhost:5173`;
 
 // https://playwright.dev/docs/test-configuration
 export default defineConfig({

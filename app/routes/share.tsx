@@ -4,7 +4,7 @@ import * as v from "valibot";
 import { expiryToDate, ShareExpiry } from "~/core/expiry";
 import { generateId } from "~/core/ids";
 import type { Json } from "~/core/json";
-import { db } from "~/db/db";
+import { db } from "~/db";
 import { shareTable } from "~/db/schema";
 
 import type { Route } from "./+types/share";
@@ -27,10 +27,14 @@ export async function action({ request }: Route.ActionArgs) {
   const data = await request.json();
   const shareData = v.parse(ShareSchema, data);
 
-  const id = generateId();
-  const expiresAt = expiryToDate(shareData.expiry);
+  const [createdShare] = await db
+    .insert(shareTable)
+    .values({
+      id: generateId(),
+      content: shareData.content,
+      expiresAt: expiryToDate(shareData.expiry),
+    })
+    .returning({ id: shareTable.id });
 
-  await db.insert(shareTable).values({ id, content: shareData.content, expiresAt });
-
-  return redirect(`/s/${id}`);
+  return redirect(`/s/${createdShare.id}`);
 }

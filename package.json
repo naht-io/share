@@ -6,6 +6,7 @@
     "build": "react-router build",
     "dev": "bun --bun react-router dev",
     "start": "bun --bun react-router-serve ./build/server/index.js",
+    "test": "bun run test:e2e",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "db:generate": "drizzle-kit generate",

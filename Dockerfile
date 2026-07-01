@@ -1,26 +1,31 @@
-FROM oven/bun:1.3.14-alpine AS development-dependencies-env
-COPY package.json bun.lock /app/
+FROM oven/bun:1.3.14-alpine AS base
 WORKDIR /app
-RUN bun install --frozen-lockfile
 
-FROM oven/bun:1.3.14-alpine AS production-dependencies-env
-COPY package.json bun.lock /app/
-WORKDIR /app
-RUN bun install --frozen-lockfile --production
+FROM base AS development-dependencies-env
+COPY package.json bun.lock ./
+RUN --mount=type=cache,target=/root/.bun/install/cache \
+    bun install --frozen-lockfile
 
-FROM oven/bun:1.3.14-alpine AS build-env
-COPY . /app/
-COPY --from=development-dependencies-env /app/node_modules /app/node_modules
-WORKDIR /app
+FROM base AS production-dependencies-env
+COPY package.json bun.lock ./
+RUN --mount=type=cache,target=/root/.bun/install/cache \
+    bun install --frozen-lockfile --production
+
+FROM base AS build-env
+COPY --from=development-dependencies-env /app/node_modules node_modules
+COPY . .
+ENV NODE_ENV=production
 RUN bun run build
 
-FROM oven/bun:1.3.14-alpine
-COPY package.json bun.lock /app/
-COPY --from=production-dependencies-env /app/node_modules /app/node_modules
-COPY --from=build-env /app/build /app/build
-COPY drizzle /app/drizzle
-WORKDIR /app
-ENV DB_FILE=/data/share.db
+FROM base
+ENV NODE_ENV=production \
+    DB_FILE=/data/share.db
+COPY package.json bun.lock ./
+COPY --from=production-dependencies-env /app/node_modules node_modules
+COPY --from=build-env /app/build build
+COPY drizzle drizzle
+RUN mkdir -p /data && chown bun:bun /data /app
+USER bun
 VOLUME /data
 EXPOSE 3000
-CMD ["bun", "run", "start"]
+CMD ["bun", "--bun", "react-router-serve", "./build/server/index.js"]

@@ -23,4 +23,4 @@ WORKDIR /app
 ENV DB_FILE=/data/share.db
 VOLUME /data
 EXPOSE 3000
-CMD ["bun", "node_modules/@react-router/serve/bin.cjs", "./build/server/index.js"]
+CMD ["bun", "run", "start"]

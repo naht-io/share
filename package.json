@@ -4,8 +4,8 @@
   "type": "module",
   "scripts": {
     "build": "react-router build",
-    "dev": "react-router dev",
-    "start": "react-router-serve ./build/server/index.js",
+    "dev": "bun --bun react-router dev",
+    "start": "bun --bun react-router-serve ./build/server/index.js",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "lint": "oxlint",

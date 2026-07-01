@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import { NavLink } from "react-router";
 
 import { Editor } from "~/components/Editor";
-import { db } from "~/db";
+import { getDb } from "~/db";
 import { shareTable } from "~/db/schema";
 
 import type { Route } from "./+types/s";
@@ -15,7 +15,7 @@ export async function loader({ params }: Route.LoaderArgs) {
     throw new Response("ID is required", { status: 400 });
   }
 
-  const [share] = await db
+  const [share] = await getDb()
     .select({
       content: shareTable.content,
       createdAt: shareTable.createdAt,

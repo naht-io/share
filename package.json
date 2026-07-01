@@ -4,8 +4,8 @@
   "type": "module",
   "scripts": {
     "build": "react-router build",
-    "dev": "react-router dev",
-    "start": "react-router-serve ./build/server/index.js",
+    "dev": "bun --bun react-router dev",
+    "start": "bun --bun react-router-serve ./build/server/index.js",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "lint": "oxlint",
@@ -17,8 +17,8 @@
   "dependencies": {
     "@fontsource-variable/space-grotesk": "^5.2.10",
     "@fontsource/space-mono": "^5.2.9",
-    "@react-router/node": "8.0.0",
-    "@react-router/serve": "8.0.0",
+    "@react-router/node": "8.1.0",
+    "@react-router/serve": "8.1.0",
     "@tiptap/extensions": "^3.27.1",
     "@tiptap/pm": "^3.27.1",
     "@tiptap/react": "^3.27.1",
@@ -33,12 +33,12 @@
     "react": "^19.2.7",
     "react-aria-components": "^1.18.0",
     "react-dom": "^19.2.7",
-    "react-router": "8.0.0",
+    "react-router": "8.1.0",
     "valibot": "^1.4.2"
   },
   "devDependencies": {
     "@playwright/test": "^1.61.1",
-    "@react-router/dev": "8.0.0",
+    "@react-router/dev": "8.1.0",
     "@tailwindcss/vite": "^4.2.2",
     "@types/bun": "^1.3.14",
     "@types/node": "^22",

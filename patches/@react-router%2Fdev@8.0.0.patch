@@ -1,0 +1,15 @@
+diff --git a/dist/typegen-DXCQyb6V.js b/dist/typegen-DXCQyb6V.js
+index 85cfbba6149ab30db0570cf0acbefde29fb52e6a..0d1ff3e038ad9c2f5600ad10c78a9787e779e7d2 100644
+--- a/dist/typegen-DXCQyb6V.js
++++ b/dist/typegen-DXCQyb6V.js
+@@ -545,8 +545,8 @@ var babel_exports = /* @__PURE__ */ __exportAll({
+ 	t: () => t$1,
+ 	traverse: () => traverse
+ });
+-const traverse = _traverse.default;
+-const generate = _generate.default;
++const traverse = _traverse.default ?? _traverse;
++const generate = _generate.default ?? _generate;
+ //#endregion
+ //#region typegen/params.ts
+ function parse(fullpath) {

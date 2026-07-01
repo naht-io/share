@@ -10,7 +10,7 @@ import { Select } from "~/components/Select";
 import { ShareExpiry } from "~/core/expiry";
 
 export function meta() {
-  return [{ title: "share" }];
+  return [{ title: "./share" }];
 }
 
 export default function Index() {

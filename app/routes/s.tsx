@@ -1,13 +1,17 @@
 import type { Content } from "@tiptap/react";
 import { formatDistanceToNow } from "date-fns";
 import { eq } from "drizzle-orm";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 
 import { Editor } from "~/components/Editor";
-import { getDb } from "~/db";
-import { shareTable } from "~/db/schema";
+import { db } from "~/db/index.server";
+import { shareTable } from "~/db/schema.server";
 
 import type { Route } from "./+types/s";
+
+export function meta() {
+  return [{ title: "./share" }];
+}
 
 export async function loader({ params }: Route.LoaderArgs) {
   const { id } = params;
@@ -15,7 +19,7 @@ export async function loader({ params }: Route.LoaderArgs) {
     throw new Response("ID is required", { status: 400 });
   }
 
-  const [share] = await getDb()
+  const [share] = await db
     .select({
       content: shareTable.content,
       createdAt: shareTable.createdAt,
@@ -60,7 +64,15 @@ export default function SharePage({ loaderData }: Route.ComponentProps) {
                 </div>
               </div>
               <div className="text-right">
-                <div>Created with ./?share</div>
+                <div>
+                  Created with{" "}
+                  <Link
+                    to="https://github.com/naht-io/share"
+                    className="underline"
+                  >
+                    ./share
+                  </Link>
+                </div>
                 <NavLink to="/" className="underline" end>
                   Share something else
                 </NavLink>

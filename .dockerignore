@@ -3,3 +3,5 @@ build
 node_modules
 README.md
 share.db
+*.db-wal
+*.db-shm

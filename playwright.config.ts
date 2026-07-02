@@ -1,6 +1,9 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const baseURL = `http://localhost:5173`;
+// In CI, test the production build; locally, use the dev server.
+// react-router-serve listens on 3000 by default, the dev server on 5173.
+const isCI = !!process.env.CI;
+const baseURL = `http://localhost:${isCI ? 3000 : 5173}`;
 
 // https://playwright.dev/docs/test-configuration
 export default defineConfig({
@@ -19,8 +22,9 @@ export default defineConfig({
     { name: "webkit", use: { ...devices["Desktop Safari"] } },
   ],
   webServer: {
-    command: "bun run dev",
+    command: isCI ? "bun run build && bun run start" : "bun run dev",
     url: baseURL,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: !isCI,
+    timeout: 120_000,
   },
 });

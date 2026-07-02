@@ -8,7 +8,7 @@ test("can submit a share", async ({ page }) => {
 
   const editor = page.locator(".ProseMirror");
   await editor.click();
-  await editor.pressSequentially("Share something with Playwright");
+  await editor.pressSequentially(EXAMPLE_TEXT);
 
   await page.getByRole("button", { name: "Expiry" }).click();
   await page.getByRole("option", { name: "Expire in 3 days" }).click();

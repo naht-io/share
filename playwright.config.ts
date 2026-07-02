@@ -1,7 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
 
-// In CI, test the production build; locally, use the dev server.
-// react-router-serve listens on 3000 by default, the dev server on 5173.
 const baseURL = `http://localhost:${process.env.CI ? 3000 : 5173}`;
 
 // https://playwright.dev/docs/test-configuration

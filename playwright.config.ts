@@ -1,6 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const baseURL = `http://localhost:5173`;
+const baseURL = `http://localhost:${process.env.CI ? 3000 : 5173}`;
 
 // https://playwright.dev/docs/test-configuration
 export default defineConfig({
@@ -19,8 +19,9 @@ export default defineConfig({
     { name: "webkit", use: { ...devices["Desktop Safari"] } },
   ],
   webServer: {
-    command: "bun run dev",
+    command: process.env.CI ? "bun run build && bun run start" : "bun run dev",
     url: baseURL,
     reuseExistingServer: !process.env.CI,
+    timeout: 120_000,
   },
 });

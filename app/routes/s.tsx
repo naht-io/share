@@ -1,6 +1,6 @@
 import type { Content } from "@tiptap/react";
 import { formatDistanceToNow } from "date-fns";
-import { eq } from "drizzle-orm";
+import { and, eq, gt } from "drizzle-orm";
 import { Link, NavLink } from "react-router";
 
 import { Editor } from "~/components/Editor";
@@ -26,7 +26,7 @@ export async function loader({ params }: Route.LoaderArgs) {
       expiresAt: shareTable.expiresAt,
     })
     .from(shareTable)
-    .where(eq(shareTable.id, id))
+    .where(and(eq(shareTable.id, id), gt(shareTable.expiresAt, new Date())))
     .limit(1);
   if (!share) {
     throw new Response(null, { status: 404 });

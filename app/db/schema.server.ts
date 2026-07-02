@@ -1,12 +1,16 @@
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { index, int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 import type { Json } from "~/core/json";
 
-export const shareTable = sqliteTable("shares", {
-  id: text().primaryKey(),
-  content: text({ mode: "json" }).$type<Json>().notNull(),
-  expiresAt: int({ mode: "timestamp" }).notNull(),
-  createdAt: int({ mode: "timestamp" })
-    .notNull()
-    .$defaultFn(() => new Date()),
-});
+export const shareTable = sqliteTable(
+  "shares",
+  {
+    id: text().primaryKey(),
+    content: text({ mode: "json" }).$type<Json>().notNull(),
+    expiresAt: int({ mode: "timestamp" }).notNull(),
+    createdAt: int({ mode: "timestamp" })
+      .notNull()
+      .$defaultFn(() => new Date()),
+  },
+  (table) => [index("shares_expires_at_idx").on(table.expiresAt)],
+);

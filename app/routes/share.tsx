@@ -24,7 +24,6 @@ const ShareSchema = v.object({
   ),
   expiry: v.pipe(
     v.enum(ShareExpiry, "invalid expiry date"),
-    // "Never expire" is disabled in the UI; reject it here too.
     v.check((expiry) => expiry !== ShareExpiry.NEVER, "invalid expiry date"),
   ),
 });

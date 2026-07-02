@@ -3,11 +3,10 @@ import { db } from "~/db/index.server";
 import { shareTable } from "~/db/schema.server";
 
 declare global {
-  // Guards against stacking intervals when Vite re-evaluates this module on HMR.
   var __purgeCronStarted: boolean | undefined;
 }
 
-// Expired shares are filtered out at read time, so a daily purge is enough.
+// Purge expired shares every day
 if (!globalThis.__purgeCronStarted) {
   globalThis.__purgeCronStarted = true;
   setInterval(purgeExpired, 24 * 60 * 60 * 1000).unref?.();

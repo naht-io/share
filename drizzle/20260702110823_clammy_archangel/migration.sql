@@ -1,0 +1,1 @@
+CREATE INDEX `shares_expires_at_idx` ON `shares` (`expiresAt`);

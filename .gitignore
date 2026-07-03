@@ -10,3 +10,5 @@
 *.db-journal
 
 test-results/
+*.db-wal
+*.db-shm

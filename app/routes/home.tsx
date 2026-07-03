@@ -1,7 +1,7 @@
 import { cx } from "class-variance-authority";
 import { MoveUpRightIcon } from "lucide-react";
 import { useRef, useState, type FormEvent } from "react";
-import { useSubmit, type SubmitTarget } from "react-router";
+import { useNavigation, useSubmit, type SubmitTarget } from "react-router";
 
 import { Button } from "~/components/Button";
 import { Editor, type EditorHandle } from "~/components/Editor";
@@ -15,8 +15,10 @@ export function meta() {
 
 export default function Index() {
   const submit = useSubmit();
+  const navigation = useNavigation();
   const editorRef = useRef<EditorHandle>(null);
   const [isEmpty, setIsEmpty] = useState(true);
+  const isSubmitting = navigation.state !== "idle";
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -76,7 +78,7 @@ export default function Index() {
           <Button
             className="inline-flex gap-1"
             type="submit"
-            isDisabled={isEmpty}
+            isDisabled={isEmpty || isSubmitting}
           >
             Share
             <MoveUpRightIcon className="size-4" />

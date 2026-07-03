@@ -2,3 +2,5 @@
 # Only discover unit tests under app/. This keeps `bun test` from picking up
 # the Playwright specs in e2e/, which must run via `bun run test:e2e` instead.
 root = "app"
+# Register the shared in-memory database mock before any test file loads.
+preload = "./app/test/preload.ts"

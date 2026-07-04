@@ -33,9 +33,7 @@ describe("s/[id]", () => {
     });
 
     test("should 404 on nonexistent id", async () => {
-      const response = await catchResponse(
-        loader(getLoaderParams("does-not-exist")),
-      );
+      const response = await catchResponse(loader(getLoaderParams("does-not-exist")));
       expect(response.status).toBe(404);
     });
 
@@ -51,9 +49,7 @@ describe("s/[id]", () => {
     });
 
     test("should 400 on missing id", async () => {
-      const response = await catchResponse(
-        loader({ params: {} } as unknown as LoaderArgs),
-      );
+      const response = await catchResponse(loader({ params: {} } as unknown as LoaderArgs));
       expect(response.status).toBe(400);
     });
   });

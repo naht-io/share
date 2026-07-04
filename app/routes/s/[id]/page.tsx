@@ -40,14 +40,8 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   url.pathname = url.pathname.replace(/\.data$/, "");
 
-  const forwardedProto = request.headers
-    .get("x-forwarded-proto")
-    ?.split(",")[0]
-    .trim();
-  const forwardedHost = request.headers
-    .get("x-forwarded-host")
-    ?.split(",")[0]
-    .trim();
+  const forwardedProto = request.headers.get("x-forwarded-proto")?.split(",")[0].trim();
+  const forwardedHost = request.headers.get("x-forwarded-host")?.split(",")[0].trim();
   if (forwardedProto) {
     url.protocol = forwardedProto;
   }
@@ -87,12 +81,10 @@ export default function SharePage({ loaderData }: Route.ComponentProps) {
             <div className="flex justify-between gap-4 text-xs text-zinc-700 dark:text-zinc-300">
               <div>
                 <div title={share.expiresAt} className="font-bold">
-                  Expires{" "}
-                  {formatDistanceToNow(share.expiresAt, { addSuffix: true })}
+                  Expires {formatDistanceToNow(share.expiresAt, { addSuffix: true })}
                 </div>
                 <div title={share.createdAt}>
-                  Created{" "}
-                  {formatDistanceToNow(share.createdAt, { addSuffix: true })}
+                  Created {formatDistanceToNow(share.createdAt, { addSuffix: true })}
                 </div>
               </div>
               <div className="text-right">
@@ -105,11 +97,7 @@ export default function SharePage({ loaderData }: Route.ComponentProps) {
                     ./share
                   </Link>
                 </div>
-                <NavLink
-                  to="/"
-                  className="underline text-zinc-900 dark:text-zinc-200"
-                  end
-                >
+                <NavLink to="/" className="underline text-zinc-900 dark:text-zinc-200" end>
                   Share something else
                 </NavLink>
               </div>
@@ -149,9 +137,7 @@ function CopyLink({ url }: { url: string }) {
 
   return (
     <div className="flex justify-end items-center gap-1">
-      <span className="text-zinc-900 dark:text-zinc-200 underline text-xs select-all">
-        {url}
-      </span>
+      <span className="text-zinc-900 dark:text-zinc-200 underline text-xs select-all">{url}</span>
       <Button
         size="icon-xs"
         variant="text"
@@ -168,11 +154,7 @@ function CopyLink({ url }: { url: string }) {
             exit={{ opacity: 0, scale: 0.5 }}
             transition={{ duration: 0.1 }}
           >
-            {copied ? (
-              <CheckIcon className="size-4" />
-            ) : (
-              <CopyIcon className="size-4" />
-            )}
+            {copied ? <CheckIcon className="size-4" /> : <CopyIcon className="size-4" />}
           </motion.span>
         </AnimatePresence>
       </Button>

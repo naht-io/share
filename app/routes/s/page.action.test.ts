@@ -44,26 +44,19 @@ describe("s/", () => {
       );
 
       const id = response.headers.get("location")!.replace("/s/", "");
-      const [row] = await db
-        .select()
-        .from(shareTable)
-        .where(eq(shareTable.id, id));
+      const [row] = await db.select().from(shareTable).where(eq(shareTable.id, id));
       expect(row.content).toEqual(validContent);
       expect(row.expiresAt).toEqual(new Date("2026-07-04T12:00:00Z"));
     });
 
     test("should 400 on invalid json", async () => {
-      const response = await catchResponse(
-        action(getActionParams("not json{")),
-      );
+      const response = await catchResponse(action(getActionParams("not json{")));
       expect(response.status).toBe(400);
     });
 
     test("should 400 on missing content", async () => {
       const response = await catchResponse(
-        action(
-          getActionParams(JSON.stringify({ expiry: ShareExpiry.TOMORROW })),
-        ),
+        action(getActionParams(JSON.stringify({ expiry: ShareExpiry.TOMORROW }))),
       );
       expect(response.status).toBe(400);
     });
@@ -123,10 +116,7 @@ describe("s/", () => {
   });
 });
 
-function getActionParams(
-  body: string,
-  headers: Record<string, string> = {},
-): ActionArgs {
+function getActionParams(body: string, headers: Record<string, string> = {}): ActionArgs {
   const request = new Request("http://localhost/share", {
     method: "POST",
     headers: { "content-type": "application/json", ...headers },

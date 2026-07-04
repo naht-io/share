@@ -111,11 +111,24 @@ function CopyLink({ url }: { url: string }) {
 
   async function copy() {
     try {
-      await navigator.clipboard.writeText(url);
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(url);
+      } else {
+        // Fallback for non-secure contexts (plain HTTP), where the
+        // Clipboard API is unavailable
+        const textarea = document.createElement("textarea");
+        textarea.value = url;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        textarea.remove();
+      }
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     } catch {
-      // Do nothing, navigator not available
+      // Do nothing, clipboard not available
     }
   }
 

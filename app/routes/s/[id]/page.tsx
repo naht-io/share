@@ -2,7 +2,7 @@ import type { Content } from "@tiptap/react";
 import { formatDistanceToNow } from "date-fns";
 import { and, eq, gt } from "drizzle-orm";
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, NavLink } from "react-router";
 
 import paperBoat from "~/assets/paper-boat.png";

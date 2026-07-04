@@ -37,54 +37,52 @@ export default function Index() {
   }
 
   return (
-    <div className="flex h-screen items-center justify-center p-4">
-      <Form className="w-full max-w-prose space-y-4" onSubmit={handleSubmit}>
-        <main
-          className={cx(
-            "border border-zinc-300 dark:border-zinc-700 shadow-sm",
-            "focus-within:ring-4 focus-within:ring-zinc-200  dark:focus-within:ring-zinc-600",
-            "transition-shadow",
-          )}
+    <Form className="w-full max-w-prose space-y-4" onSubmit={handleSubmit}>
+      <main
+        className={cx(
+          "border border-zinc-300 dark:border-zinc-700 shadow-sm",
+          "focus-within:ring-4 focus-within:ring-zinc-200  dark:focus-within:ring-zinc-600",
+          "transition-shadow",
+        )}
+      >
+        <Editor
+          ref={editorRef}
+          onCreate={(editor) => setIsEmpty(editor.isEmpty)}
+          onUpdate={(editor) => setIsEmpty(editor.isEmpty)}
+        />
+      </main>
+      <aside className="flex justify-between gap-2">
+        <Select aria-label="Expiry" defaultValue="tomorrow" name="expiry">
+          <Select.Trigger></Select.Trigger>
+          <Select.Popover>
+            <Select.List>
+              <Select.Item id={ShareExpiry.TOMORROW}>
+                Expire tomorrow
+              </Select.Item>
+              <Select.Item id={ShareExpiry.THREE_DAYS}>
+                Expire in 3 days
+              </Select.Item>
+              <Select.Item id={ShareExpiry.ONE_WEEK}>
+                Expire in 1 week
+              </Select.Item>
+              <Select.Item id={ShareExpiry.ONE_MONTH}>
+                Expire in 1 month
+              </Select.Item>
+              <Select.Item id={ShareExpiry.NEVER} isDisabled={true}>
+                Never expire
+              </Select.Item>
+            </Select.List>
+          </Select.Popover>
+        </Select>
+        <Button
+          className="inline-flex gap-1"
+          type="submit"
+          isDisabled={isEmpty || isSubmitting}
         >
-          <Editor
-            ref={editorRef}
-            onCreate={(editor) => setIsEmpty(editor.isEmpty)}
-            onUpdate={(editor) => setIsEmpty(editor.isEmpty)}
-          />
-        </main>
-        <aside className="flex justify-between gap-2">
-          <Select aria-label="Expiry" defaultValue="tomorrow" name="expiry">
-            <Select.Trigger></Select.Trigger>
-            <Select.Popover>
-              <Select.List>
-                <Select.Item id={ShareExpiry.TOMORROW}>
-                  Expire tomorrow
-                </Select.Item>
-                <Select.Item id={ShareExpiry.THREE_DAYS}>
-                  Expire in 3 days
-                </Select.Item>
-                <Select.Item id={ShareExpiry.ONE_WEEK}>
-                  Expire in 1 week
-                </Select.Item>
-                <Select.Item id={ShareExpiry.ONE_MONTH}>
-                  Expire in 1 month
-                </Select.Item>
-                <Select.Item id={ShareExpiry.NEVER} isDisabled={true}>
-                  Never expire
-                </Select.Item>
-              </Select.List>
-            </Select.Popover>
-          </Select>
-          <Button
-            className="inline-flex gap-1"
-            type="submit"
-            isDisabled={isEmpty || isSubmitting}
-          >
-            Share
-            <MoveUpRightIcon className="size-4" />
-          </Button>
-        </aside>
-      </Form>
-    </div>
+          Share
+          <MoveUpRightIcon className="size-4" />
+        </Button>
+      </aside>
+    </Form>
   );
 }

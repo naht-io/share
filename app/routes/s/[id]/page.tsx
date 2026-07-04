@@ -50,52 +50,50 @@ export default function SharePage({ loaderData }: Route.ComponentProps) {
   const share = loaderData.data;
 
   return (
-    <div className="flex h-screen items-center justify-center p-4">
-      {share && (
-        <div className="w-full max-w-prose space-y-12">
-          <div className="space-y-4">
-            <aside>
-              <CopyLink url={share.url} />
-            </aside>
-            <main className="border border-zinc-300 dark:border-zinc-700 shadow-sm">
-              <Editor editable={false} content={share.content as Content} />
-            </main>
-          </div>
+    share && (
+      <div className="w-full max-w-prose space-y-12">
+        <div className="space-y-4">
           <aside>
-            <div className="flex flex-col justify-between gap-4 text-xs text-zinc-700 dark:text-zinc-300 sm:flex-row">
-              <div>
-                <div title={share.expiresAt} className="font-bold">
-                  Expires{" "}
-                  {formatDistanceToNow(share.expiresAt, { addSuffix: true })}
-                </div>
-                <div title={share.createdAt}>
-                  Created{" "}
-                  {formatDistanceToNow(share.createdAt, { addSuffix: true })}
-                </div>
+            <CopyLink url={share.url} />
+          </aside>
+          <main className="border border-zinc-300 dark:border-zinc-700 shadow-sm">
+            <Editor editable={false} content={share.content as Content} />
+          </main>
+        </div>
+        <aside>
+          <div className="flex flex-col justify-between gap-4 text-xs text-zinc-700 dark:text-zinc-300 sm:flex-row">
+            <div>
+              <div title={share.expiresAt} className="font-bold">
+                Expires{" "}
+                {formatDistanceToNow(share.expiresAt, { addSuffix: true })}
               </div>
-              <div className="text-right">
-                <div>
-                  Created with{" "}
-                  <Link
-                    to="https://github.com/naht-io/share"
-                    className="underline text-zinc-900 dark:text-zinc-200"
-                  >
-                    ./share
-                  </Link>
-                </div>
-                <NavLink
-                  to="/"
-                  className="underline text-zinc-900 dark:text-zinc-200"
-                  end
-                >
-                  Share something else
-                </NavLink>
+              <div title={share.createdAt}>
+                Created{" "}
+                {formatDistanceToNow(share.createdAt, { addSuffix: true })}
               </div>
             </div>
-          </aside>
-        </div>
-      )}
-    </div>
+            <div className="text-right">
+              <div>
+                Created with{" "}
+                <Link
+                  to="https://github.com/naht-io/share"
+                  className="underline text-zinc-900 dark:text-zinc-200"
+                >
+                  ./share
+                </Link>
+              </div>
+              <NavLink
+                to="/"
+                className="underline text-zinc-900 dark:text-zinc-200"
+                end
+              >
+                Share something else
+              </NavLink>
+            </div>
+          </div>
+        </aside>
+      </div>
+    )
   );
 }
 

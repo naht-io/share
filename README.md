@@ -39,4 +39,4 @@ bun run dev  # start the dev server at http://localhost:5173
 
 ---
 
-Built with 💖 by nath.io
+Built with 💖 by naht.io

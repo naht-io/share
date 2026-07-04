@@ -52,13 +52,15 @@ export default function SharePage({ loaderData }: Route.ComponentProps) {
   return (
     <div className="flex h-screen items-center justify-center p-4">
       {share && (
-        <div className="w-full max-w-prose space-y-4">
-          <aside>
-            <CopyLink url={share.url} />
-          </aside>
-          <main className="border border-zinc-300 dark:border-zinc-700 shadow-sm">
-            <Editor editable={false} content={share.content as Content} />
-          </main>
+        <div className="w-full max-w-prose space-y-12">
+          <div className="space-y-4">
+            <aside>
+              <CopyLink url={share.url} />
+            </aside>
+            <main className="border border-zinc-300 dark:border-zinc-700 shadow-sm">
+              <Editor editable={false} content={share.content as Content} />
+            </main>
+          </div>
           <aside>
             <div className="flex flex-col justify-between gap-4 text-xs text-zinc-700 dark:text-zinc-300 sm:flex-row">
               <div>

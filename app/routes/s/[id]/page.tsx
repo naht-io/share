@@ -64,7 +64,7 @@ export default function SharePage({ loaderData }: Route.ComponentProps) {
         <aside className="md:col-start-2 md:row-start-1">
           <CopyLink url={share.url} />
         </aside>
-        <div className="min-w-0 space-y-12 md:col-start-2 md:row-start-2">
+        <div className="min-w-0 space-y-4 md:col-start-2 md:row-start-2">
           <main className="border border-zinc-300 dark:border-zinc-700 shadow-sm">
             <Editor editable={false} content={share.content as Content} />
           </main>

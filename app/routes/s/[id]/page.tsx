@@ -40,6 +40,21 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   url.pathname = url.pathname.replace(/\.data$/, "");
 
+  const forwardedProto = request.headers
+    .get("x-forwarded-proto")
+    ?.split(",")[0]
+    .trim();
+  const forwardedHost = request.headers
+    .get("x-forwarded-host")
+    ?.split(",")[0]
+    .trim();
+  if (forwardedProto) {
+    url.protocol = forwardedProto;
+  }
+  if (forwardedHost) {
+    url.host = forwardedHost;
+  }
+
   return {
     data: {
       content: share.content,

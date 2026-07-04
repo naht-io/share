@@ -4,8 +4,7 @@ import {
   type ButtonProps as AriaButtonProps,
 } from "react-aria-components/Button";
 
-interface ButtonProps
-  extends AriaButtonProps, VariantProps<typeof buttonStyle> {}
+interface ButtonProps extends AriaButtonProps, VariantProps<typeof buttonStyle> {}
 
 export function Button({ size, variant, className, ...rest }: ButtonProps) {
   return (

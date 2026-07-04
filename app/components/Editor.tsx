@@ -25,13 +25,7 @@ import {
 
 import "./Editor.css";
 import { AnimatePresence, motion } from "motion/react";
-import {
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-  type Ref,
-} from "react";
+import { useEffect, useImperativeHandle, useRef, useState, type Ref } from "react";
 import { ToggleButtonGroup, Toolbar } from "react-aria-components";
 
 import { Dropdown } from "./Dropdown";
@@ -139,22 +133,14 @@ export function Editor(props: EditorProps) {
             // Otherwise mirror tiptap's default shouldShow behavior.
             const { doc, selection } = state;
             const isEmptyTextBlock =
-              !doc.textBetween(from, to).length &&
-              selection instanceof TextSelection;
+              !doc.textBetween(from, to).length && selection instanceof TextSelection;
             const isChildOfMenu = element.contains(document.activeElement);
             const hasEditorFocus = view.hasFocus() || isChildOfMenu;
 
-            return (
-              hasEditorFocus &&
-              !selection.empty &&
-              !isEmptyTextBlock &&
-              editor.isEditable
-            );
+            return hasEditorFocus && !selection.empty && !isEmptyTextBlock && editor.isEditable;
           }}
           style={
-            animatePosition
-              ? { transition: "top 0.15s ease-out, left 0.15s ease-out" }
-              : undefined
+            animatePosition ? { transition: "top 0.15s ease-out, left 0.15s ease-out" } : undefined
           }
           options={{
             onShow: () => {
@@ -162,9 +148,7 @@ export function Editor(props: EditorProps) {
               setShowCount((count) => count + 1);
               // Enable position transitions only after floating-ui has placed
               // the menu once, so it doesn't slide in from its previous spot.
-              requestAnimationFrame(() =>
-                requestAnimationFrame(() => setAnimatePosition(true)),
-              );
+              requestAnimationFrame(() => requestAnimationFrame(() => setAnimatePosition(true)));
             },
             onHide: () => {
               setIsOpen(false);
@@ -214,88 +198,53 @@ export function Editor(props: EditorProps) {
                   size="icon-sm"
                   aria-label="Underline"
                   isSelected={marks?.isUnderline ?? false}
-                  onChange={() =>
-                    editor.chain().focus().toggleUnderline().run()
-                  }
+                  onChange={() => editor.chain().focus().toggleUnderline().run()}
                 >
                   <UnderlineIcon className="size-4" />
                 </ToggleButton>
               </ToggleButtonGroup>
-              <Dropdown
-                onOpenChange={(isOpen) => (isStyleOpenRef.current = isOpen)}
-              >
+              <Dropdown onOpenChange={(isOpen) => (isStyleOpenRef.current = isOpen)}>
                 <Dropdown.Trigger size="sm" variant="text">
                   Style
                 </Dropdown.Trigger>
                 <Dropdown.Popover>
-                  <Dropdown.Menu
-                    aria-label="Text style"
-                    className="*:flex *:items-center *:gap-2"
-                  >
-                    <Dropdown.MenuItem
-                      onAction={() =>
-                        editor.chain().focus().setParagraph().run()
-                      }
-                    >
+                  <Dropdown.Menu aria-label="Text style" className="*:flex *:items-center *:gap-2">
+                    <Dropdown.MenuItem onAction={() => editor.chain().focus().setParagraph().run()}>
                       <TextAlignStartIcon className="size-4" />
                       Paragraph
                     </Dropdown.MenuItem>
                     <Dropdown.MenuItem
-                      onAction={() =>
-                        editor
-                          ?.chain()
-                          .focus()
-                          .toggleHeading({ level: 1 })
-                          .run()
-                      }
+                      onAction={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}
                     >
                       <Heading1Icon className="size-4" />
                       Heading 1
                     </Dropdown.MenuItem>
                     <Dropdown.MenuItem
-                      onAction={() =>
-                        editor
-                          ?.chain()
-                          .focus()
-                          .toggleHeading({ level: 2 })
-                          .run()
-                      }
+                      onAction={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
                     >
                       <Heading2Icon className="size-4" />
                       Heading 2
                     </Dropdown.MenuItem>
                     <Dropdown.MenuItem
-                      onAction={() =>
-                        editor
-                          ?.chain()
-                          .focus()
-                          .toggleHeading({ level: 3 })
-                          .run()
-                      }
+                      onAction={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}
                     >
                       <Heading3Icon className="size-4" />
                       Heading 3
                     </Dropdown.MenuItem>
                     <Dropdown.MenuItem
-                      onAction={() =>
-                        editor.chain().focus().toggleBlockquote().run()
-                      }
+                      onAction={() => editor.chain().focus().toggleBlockquote().run()}
                     >
                       <TextQuoteIcon className="size-4" />
                       Blockquote
                     </Dropdown.MenuItem>
                     <Dropdown.MenuItem
-                      onAction={() =>
-                        editor.chain().focus().toggleBulletList().run()
-                      }
+                      onAction={() => editor.chain().focus().toggleBulletList().run()}
                     >
                       <ListIcon className="size-4" />
                       Bullet List
                     </Dropdown.MenuItem>
                     <Dropdown.MenuItem
-                      onAction={() =>
-                        editor.chain().focus().toggleOrderedList().run()
-                      }
+                      onAction={() => editor.chain().focus().toggleOrderedList().run()}
                     >
                       <ListOrderedIcon className="size-4" />
                       Ordered List

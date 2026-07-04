@@ -4,7 +4,8 @@ import {
   type ButtonProps as AriaButtonProps,
 } from "react-aria-components/Button";
 
-interface ButtonProps extends AriaButtonProps, VariantProps<typeof buttonStyle> {}
+interface ButtonProps
+  extends AriaButtonProps, VariantProps<typeof buttonStyle> {}
 
 export function Button({ size, variant, className, ...rest }: ButtonProps) {
   return (
@@ -28,8 +29,10 @@ const buttonStyle = cva(
   {
     variants: {
       size: {
+        xs: "px-2 h-6 text-xs",
         sm: "px-3 h-8 text-sm",
         md: "px-4 h-10 text-sm",
+        "icon-xs": "size-6",
         "icon-sm": "size-8",
         "icon-md": "size-10",
         icon: "size-10",

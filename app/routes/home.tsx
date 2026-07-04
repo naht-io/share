@@ -41,7 +41,7 @@ export default function Index() {
       <Form className="w-full max-w-prose space-y-4" onSubmit={handleSubmit}>
         <main
           className={cx(
-            "border border-zinc-300 dark:border-zinc-700",
+            "border border-zinc-300 dark:border-zinc-700 shadow-sm",
             "focus-within:ring-4 focus-within:ring-zinc-200  dark:focus-within:ring-zinc-600",
             "transition-shadow",
           )}

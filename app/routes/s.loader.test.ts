@@ -28,10 +28,13 @@ describe("s/ loader", () => {
     expect(result.data.content).toEqual(content);
     expect(result.data.createdAt).toBe(createdAt.toISOString());
     expect(result.data.expiresAt).toBe(expiresAt.toISOString());
+    expect(result.data.url).toBe(`https://share.example/s/${id}`);
   });
 
   test("should 404 on nonexistent id", async () => {
-    const response = await catchResponse(loader(getLoaderParams("does-not-exist")));
+    const response = await catchResponse(
+      loader(getLoaderParams("does-not-exist")),
+    );
     expect(response.status).toBe(404);
   });
 
@@ -47,13 +50,18 @@ describe("s/ loader", () => {
   });
 
   test("should 400 on missing id", async () => {
-    const response = await catchResponse(loader({ params: {} } as unknown as LoaderArgs));
+    const response = await catchResponse(
+      loader({ params: {} } as unknown as LoaderArgs),
+    );
     expect(response.status).toBe(400);
   });
 });
 
 function getLoaderParams(id: string): LoaderArgs {
-  return { params: { id } } as unknown as LoaderArgs;
+  return {
+    params: { id },
+    request: new Request("https://share.example/s/" + id),
+  } as unknown as LoaderArgs;
 }
 
 type LoaderArgs = Parameters<typeof loader>[0];

@@ -32,7 +32,7 @@ export default function Index() {
         content: editor.getJSON(),
         expiry: formData.get("expiry"),
       } as SubmitTarget,
-      { method: "POST", action: "/share", encType: "application/json" },
+      { method: "POST", action: "/s", encType: "application/json" },
     );
   }
 
@@ -57,17 +57,29 @@ export default function Index() {
             <Select.Trigger></Select.Trigger>
             <Select.Popover>
               <Select.List>
-                <Select.Item id={ShareExpiry.TOMORROW}>Expire tomorrow</Select.Item>
-                <Select.Item id={ShareExpiry.THREE_DAYS}>Expire in 3 days</Select.Item>
-                <Select.Item id={ShareExpiry.ONE_WEEK}>Expire in 1 week</Select.Item>
-                <Select.Item id={ShareExpiry.ONE_MONTH}>Expire in 1 month</Select.Item>
+                <Select.Item id={ShareExpiry.TOMORROW}>
+                  Expire tomorrow
+                </Select.Item>
+                <Select.Item id={ShareExpiry.THREE_DAYS}>
+                  Expire in 3 days
+                </Select.Item>
+                <Select.Item id={ShareExpiry.ONE_WEEK}>
+                  Expire in 1 week
+                </Select.Item>
+                <Select.Item id={ShareExpiry.ONE_MONTH}>
+                  Expire in 1 month
+                </Select.Item>
                 <Select.Item id={ShareExpiry.NEVER} isDisabled={true}>
                   Never expire
                 </Select.Item>
               </Select.List>
             </Select.Popover>
           </Select>
-          <Button className="inline-flex gap-1" type="submit" isDisabled={isEmpty || isSubmitting}>
+          <Button
+            className="inline-flex gap-1"
+            type="submit"
+            isDisabled={isEmpty || isSubmitting}
+          >
             Share
             <MoveUpRightIcon className="size-4" />
           </Button>

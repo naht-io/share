@@ -9,7 +9,7 @@ import { Editor } from "~/components/Editor";
 import { db } from "~/db/index.server";
 import { shareTable } from "~/db/schema.server";
 
-import type { Route } from "./+types/s";
+import type { Route } from "./+types/page";
 import { Button } from "~/components/Button";
 import { CheckIcon, CopyIcon } from "lucide-react";
 

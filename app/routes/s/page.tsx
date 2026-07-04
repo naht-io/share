@@ -7,7 +7,7 @@ import type { Json } from "~/core/json";
 import { db } from "~/db/index.server";
 import { shareTable } from "~/db/schema.server";
 
-import type { Route } from "./+types/share";
+import type { Route } from "../s/+types/page";
 
 const MAX_BODY_BYTES = 256 * 1024;
 

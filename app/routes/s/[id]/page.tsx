@@ -63,10 +63,12 @@ export default function SharePage({ loaderData }: Route.ComponentProps) {
             <div className="flex flex-col justify-between gap-4 text-xs text-zinc-700 dark:text-zinc-300 sm:flex-row">
               <div>
                 <div title={share.expiresAt} className="font-bold">
-                  Expires {formatDistanceToNow(share.expiresAt, { addSuffix: true })}
+                  Expires{" "}
+                  {formatDistanceToNow(share.expiresAt, { addSuffix: true })}
                 </div>
                 <div title={share.createdAt}>
-                  Created {formatDistanceToNow(share.createdAt, { addSuffix: true })}
+                  Created{" "}
+                  {formatDistanceToNow(share.createdAt, { addSuffix: true })}
                 </div>
               </div>
               <div className="text-right">
@@ -79,7 +81,11 @@ export default function SharePage({ loaderData }: Route.ComponentProps) {
                     ./share
                   </Link>
                 </div>
-                <NavLink to="/" className="underline text-zinc-900 dark:text-zinc-200" end>
+                <NavLink
+                  to="/"
+                  className="underline text-zinc-900 dark:text-zinc-200"
+                  end
+                >
                   Share something else
                 </NavLink>
               </div>
@@ -93,26 +99,26 @@ export default function SharePage({ loaderData }: Route.ComponentProps) {
 
 function CopyLink({ url }: { url: string }) {
   const [copied, setCopied] = useState(false);
-  const [canCopy, setCanCopy] = useState(false);
-
-  useEffect(() => {
-    setCanCopy(typeof navigator !== "undefined" && !!navigator.clipboard);
-  }, []);
 
   async function copy() {
-    await navigator.clipboard.writeText(url);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // Do nothing, navigator not available
+    }
   }
 
   return (
     <div className="flex justify-end items-center gap-1">
-      <span className="text-zinc-900 dark:text-zinc-200 underline text-xs select-all">{url}</span>
+      <span className="text-zinc-900 dark:text-zinc-200 underline text-xs select-all">
+        {url}
+      </span>
       <Button
         size="icon-xs"
         variant="text"
         onPress={copy}
-        isDisabled={!canCopy}
         aria-label="Copy link"
         className="grid place-items-center"
       >
@@ -125,7 +131,11 @@ function CopyLink({ url }: { url: string }) {
             exit={{ opacity: 0, scale: 0.5 }}
             transition={{ duration: 0.1 }}
           >
-            {copied ? <CheckIcon className="size-4" /> : <CopyIcon className="size-4" />}
+            {copied ? (
+              <CheckIcon className="size-4" />
+            ) : (
+              <CopyIcon className="size-4" />
+            )}
           </motion.span>
         </AnimatePresence>
       </Button>

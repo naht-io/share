@@ -36,12 +36,15 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     throw new Response(null, { status: 404 });
   }
 
+  const url = new URL(request.url);
+  url.pathname = url.pathname.replace(/\.data$/, "");
+
   return {
     data: {
       content: share.content,
       createdAt: share.createdAt.toISOString(),
       expiresAt: share.expiresAt.toISOString(),
-      url: new URL(request.url).href,
+      url: url.href,
     },
   };
 }

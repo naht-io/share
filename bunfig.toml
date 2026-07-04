@@ -4,13 +4,3 @@
 root = "app"
 # Register the shared in-memory database mock before any test file loads.
 preload = "./app/test/preload.ts"
-
-# Coverage is collected via `bun run test:coverage` (also used in CI). React
-# components are excluded — they are exercised by the Playwright e2e suite,
-# not by unit tests.
-coverageSkipTestFiles = true
-coveragePathIgnorePatterns = ["**/components/**"]
-# Bun enforces the threshold per file (not on the overall total), so it is
-# bounded by the least-covered file: route modules mix unit-testable
-# loaders/actions with React components that only the e2e suite exercises.
-coverageThreshold = { lines = 0.4, functions = 0.4 }

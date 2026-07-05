@@ -7,4 +7,19 @@ export default defineConfig({
   resolve: {
     tsconfigPaths: true,
   },
+  optimizeDeps: {
+    include: [
+      "@tiptap/extensions",
+      "@tiptap/react",
+      "@tiptap/react/menus",
+      "@tiptap/pm/state",
+      "@tiptap/starter-kit",
+      "class-variance-authority",
+      "date-fns",
+      "lucide-react",
+      "motion/react",
+      "react-aria-components",
+      "react-dom",
+    ],
+  },
 });

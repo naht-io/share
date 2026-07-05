@@ -2,9 +2,10 @@ import { cva, type VariantProps } from "class-variance-authority";
 import {
   Button as AriaButton,
   type ButtonProps as AriaButtonProps,
-} from "react-aria-components/Button";
+} from "react-aria-components";
 
-interface ButtonProps extends AriaButtonProps, VariantProps<typeof buttonStyle> {}
+interface ButtonProps
+  extends AriaButtonProps, VariantProps<typeof buttonStyle> {}
 
 export function Button({ size, variant, className, ...rest }: ButtonProps) {
   return (

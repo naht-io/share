@@ -26,7 +26,7 @@ import {
 
 import "./Editor.css";
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useImperativeHandle, useRef, useState, type Ref } from "react";
+import { useImperativeHandle, useRef, useState, type Ref } from "react";
 import { ToggleButtonGroup, Toolbar } from "react-aria-components";
 
 import { Dropdown } from "./Dropdown";
@@ -114,14 +114,6 @@ export function Editor(props: EditorProps) {
   const isStyleOpenRef = useRef(false);
 
   const bubbleMenuRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    // The bubble menu plugin sets tabIndex=0 on its wrapper element, so pressing
-    // Tab from the editor focuses the whole popover instead of the first toolbar
-    // item. Remove the wrapper from the tab order so focus lands on the toolbar's
-    // first control (the Toolbar manages roving tabindex among its children).
-    // This effect runs after the plugin's, which sets the tabIndex on mount.
-    bubbleMenuRef.current?.setAttribute("tabindex", "-1");
-  }, [editor]);
 
   if (!editor) {
     return (
@@ -171,6 +163,15 @@ export function Editor(props: EditorProps) {
           }
           options={{
             onShow: () => {
+              // The bubble menu plugin sets tabIndex=0 on its wrapper whenever
+              // its view is constructed (including StrictMode's remount cycle),
+              // so pressing Tab from the editor would focus the whole popover
+              // instead of the first toolbar item. The wrapper is only tabbable
+              // while visible, so removing it from the tab order on every show
+              // is guaranteed to run after the plugin. Focus then lands on the
+              // toolbar's first control (the Toolbar manages roving tabindex
+              // among its children).
+              bubbleMenuRef.current?.setAttribute("tabindex", "-1");
               setIsOpen(true);
               setShowCount((count) => count + 1);
               // Enable position transitions only after floating-ui has placed

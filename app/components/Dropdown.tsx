@@ -26,7 +26,7 @@ function DropdownTrigger({ variant, size, ...props }: DropdownTriggerProps) {
   return (
     <Button className={dropdownTriggerStyle({ variant, size })}>
       {props.children}
-      <ChevronDownIcon className="size-4" />
+      <ChevronDownIcon />
     </Button>
   );
 }
@@ -41,8 +41,9 @@ const dropdownTriggerStyle = cva(
   {
     variants: {
       size: {
-        sm: "px-3 h-8 text-sm",
-        md: "px-4 h-10 text-sm",
+        xs: "px-2 h-6 text-xs *:[svg]:size-3 gap-0.5",
+        sm: "px-3 h-8 text-sm *:[svg]:size-4 gap-1",
+        md: "px-4 h-10 text-sm *:[svg]:size-4 gap-1",
       },
       variant: {
         solid: [

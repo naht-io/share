@@ -27,14 +27,14 @@ function SelectTrigger<T>({ variant, size, ...props }: SelectTriggerProps<T>) {
   return (
     <Button className={selectTriggerStyle({ variant, size })}>
       <SelectValue {...props} />
-      <ChevronDownIcon className="size-4" />
+      <ChevronDownIcon />
     </Button>
   );
 }
 
 const selectTriggerStyle = cva(
   [
-    "inline-flex items-center justify-center gap-2",
+    "inline-flex items-center justify-center",
     "whitespace-nowrap",
     "border rounded-xs",
     "transition-[background-color,box-shadow] duration-100",
@@ -42,8 +42,9 @@ const selectTriggerStyle = cva(
   {
     variants: {
       size: {
-        sm: "px-3 h-8 text-sm",
-        md: "px-4 h-10 text-sm",
+        xs: "px-2 h-6 text-xs *:[svg]:size-3 gap-1",
+        sm: "px-3 h-8 text-sm *:[svg]:size-4 gap-2",
+        md: "px-4 h-10 text-sm *:[svg]:size-4 gap-2",
       },
       variant: {
         solid: [

@@ -62,7 +62,7 @@ function FileView({ node, editor, extension, deleteNode }: NodeViewProps) {
           aria-label={`Remove ${name}`}
           onPress={() => deleteNode()}
         >
-          <XIcon className="size-4" />
+          <XIcon />
         </Button>
       )}
     </>

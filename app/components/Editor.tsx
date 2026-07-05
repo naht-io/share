@@ -209,7 +209,7 @@ export function Editor(props: EditorProps) {
                   isSelected={marks?.isBold ?? false}
                   onChange={() => editor.chain().focus().toggleBold().run()}
                 >
-                  <BoldIcon className="size-4" />
+                  <BoldIcon />
                 </ToggleButton>
                 <ToggleButton
                   variant="text"
@@ -218,7 +218,7 @@ export function Editor(props: EditorProps) {
                   isSelected={marks?.isItalic ?? false}
                   onChange={() => editor.chain().focus().toggleItalic().run()}
                 >
-                  <ItalicIcon className="size-4" />
+                  <ItalicIcon />
                 </ToggleButton>
                 <ToggleButton
                   variant="text"
@@ -227,7 +227,7 @@ export function Editor(props: EditorProps) {
                   isSelected={marks?.isUnderline ?? false}
                   onChange={() => editor.chain().focus().toggleUnderline().run()}
                 >
-                  <UnderlineIcon className="size-4" />
+                  <UnderlineIcon />
                 </ToggleButton>
               </ToggleButtonGroup>
               <Dropdown onOpenChange={(isOpen) => (isStyleOpenRef.current = isOpen)}>

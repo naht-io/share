@@ -30,11 +30,13 @@ const toggleButtonStyle = cva(
   {
     variants: {
       size: {
-        sm: "px-3 h-8 text-sm",
-        md: "px-4 h-10 text-sm",
-        "icon-sm": "size-8",
-        "icon-md": "size-10",
-        icon: "size-10",
+        xs: "px-2 h-6 text-xs *:[svg]:size-3 gap-0.5",
+        "icon-xs": "size-6 *:[svg]:size-3",
+        sm: "px-3 h-8 text-sm *:[svg]:size-4 gap-1",
+        "icon-sm": "size-8 *:[svg]:size-4",
+        md: "px-4 h-10 text-sm *:[svg]:size-4 gap-1",
+        "icon-md": "size-10 *:[svg]:size-4",
+        icon: "size-10 *:[svg]:size-4",
       },
       variant: {
         text: [

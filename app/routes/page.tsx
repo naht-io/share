@@ -126,13 +126,8 @@ export default function Index({ loaderData }: Route.ComponentProps) {
             event.currentTarget.value = "";
           }}
         />
-        <Button
-          size="sm"
-          variant="text"
-          className="inline-flex gap-1"
-          onPress={() => fileInputRef.current?.click()}
-        >
-          <PaperclipIcon className="size-4" />
+        <Button size="sm" variant="text" onPress={() => fileInputRef.current?.click()}>
+          <PaperclipIcon />
           Add files
         </Button>
       </aside>
@@ -172,7 +167,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
               </Select.List>
             </Select.Popover>
           </Select>
-          <Button className="inline-flex gap-1" type="submit" isDisabled={isEmpty || isSubmitting}>
+          <Button type="submit" isDisabled={isEmpty || isSubmitting}>
             Share
             <MoveUpRightIcon className="size-4" />
           </Button>

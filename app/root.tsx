@@ -13,6 +13,16 @@ import "@fontsource-variable/space-grotesk/wght.css";
 import "@fontsource/space-mono/400.css";
 import "./app.css";
 
+export function links() {
+  return [
+    {
+      rel: "icon",
+      href: "/favicon.svg",
+      type: "image/svg+xml",
+    },
+  ];
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">

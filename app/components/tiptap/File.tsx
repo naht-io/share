@@ -69,7 +69,7 @@ function FileView({ node, editor, extension, deleteNode }: NodeViewProps) {
   );
 
   return (
-    <NodeViewWrapper data-file="" className="my-1">
+    <NodeViewWrapper data-file="">
       {!editor.isEditable && downloadBasePath ? (
         <Chip as="a" interactive href={`${downloadBasePath}/${id}`} download={name}>
           {content}

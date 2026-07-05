@@ -7,7 +7,7 @@ import { useEffect, useRef } from "react";
 // the library's uncapped rAF loop (speed={0} disables it entirely).
 const FPS = 10;
 const FRAME_MS = 1000 / FPS;
-const SPEED = 1;
+const SPEED = 0.5;
 
 export function BackgroundDither() {
   const shaderRef = useRef<PaperShaderElement>(null);

@@ -134,7 +134,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
       <Form className="min-w-0 space-y-4 md:col-start-2 md:row-start-2" onSubmit={handleSubmit}>
         <main
           className={cx(
-            "border border-zinc-300 dark:border-zinc-700 shadow-sm",
+            "border border-zinc-300 dark:border-zinc-700 shadow-sm dark:shadow-black/50",
             "bg-zinc-50 dark:bg-zinc-900",
             "focus-within:ring-4 focus-within:ring-zinc-200  dark:focus-within:ring-zinc-600",
             "transition-shadow",

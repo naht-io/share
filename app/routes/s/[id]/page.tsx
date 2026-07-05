@@ -14,8 +14,22 @@ import type { Route } from "./+types/page";
 import { Button } from "~/components/Button";
 import { CheckIcon, CopyIcon } from "lucide-react";
 
-export function meta() {
-  return [{ title: "./share" }];
+export function meta({ loaderData }: Route.MetaArgs) {
+  const share = loaderData.data;
+  const description = `Someone shared something with you. Expires ${formatDistanceToNow(
+    share.expiresAt,
+    { addSuffix: true },
+  )}.`;
+
+  return [
+    { title: "./share" },
+    { name: "description", content: description },
+    { property: "og:title", content: "./share" },
+    { property: "og:description", content: description },
+    { property: "og:type", content: "website" },
+    { property: "og:site_name", content: "./share" },
+    { property: "og:url", content: share.url },
+  ];
 }
 
 export async function loader({ params, request }: Route.LoaderArgs) {
@@ -46,6 +60,9 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     url.protocol = forwardedProto;
   }
   if (forwardedHost) {
+    // Clear the origin server's port first; the host setter keeps an existing
+    // port when the new value has none.
+    url.port = "";
     url.host = forwardedHost;
   }
 

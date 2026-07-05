@@ -20,6 +20,7 @@
   "dependencies": {
     "@fontsource-variable/space-grotesk": "^5.2.10",
     "@fontsource/space-mono": "^5.2.9",
+    "@paper-design/shaders-react": "^0.0.77",
     "@react-router/node": "8.1.0",
     "@react-router/serve": "8.1.0",
     "@remix-run/file-storage": "^0.13.7",

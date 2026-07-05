@@ -135,6 +135,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
         <main
           className={cx(
             "border border-zinc-300 dark:border-zinc-700 shadow-sm",
+            "bg-zinc-50 dark:bg-zinc-900",
             "focus-within:ring-4 focus-within:ring-zinc-200  dark:focus-within:ring-zinc-600",
             "transition-shadow",
           )}

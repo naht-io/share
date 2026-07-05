@@ -9,6 +9,8 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: [
+      "@tiptap/core",
+      "@tiptap/extension-file-handler",
       "@tiptap/extensions",
       "@tiptap/react",
       "@tiptap/react/menus",

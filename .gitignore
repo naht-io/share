@@ -9,6 +9,9 @@
 *.db
 *.db-journal
 
+# Uploaded files
+/files/
+
 test-results/
 *.db-wal
 *.db-shm

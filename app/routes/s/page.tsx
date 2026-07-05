@@ -1,15 +1,34 @@
+import {
+  FormDataParseError,
+  MaxFilesExceededError,
+  MaxFileSizeExceededError,
+  MaxTotalSizeExceededError,
+  parseFormData,
+} from "@remix-run/form-data-parser";
 import { redirect } from "react-router";
 import * as v from "valibot";
 
 import { expiryToDate, ShareExpiry } from "~/core/expiry";
+import { collectFileNodes } from "~/core/files";
 import { generateId } from "~/core/ids";
 import type { Json } from "~/core/json";
 import { db } from "~/db/index.server";
 import { shareTable } from "~/db/schema.server";
+import {
+  fileKey,
+  fileStorage,
+  MAX_FILE_SIZE,
+  MAX_UPLOAD_SIZE,
+  removeShareFiles,
+} from "~/files/index.server";
 
 import type { Route } from "../s/+types/page";
 
-const MAX_BODY_BYTES = 256 * 1024;
+const MAX_CONTENT_BYTES = 256 * 1024;
+const MAX_FILES = 100;
+// Multipart field names for uploads are "file:<id>", where <id> comes from
+// generateId()'s nanoid alphabet.
+const FILE_FIELD = /^file:([0-9BCDFGHJ-NP-TV-Zbcdfghj-np-tv-z]{12})$/;
 
 const ShareSchema = v.object({
   content: v.pipe(
@@ -29,37 +48,96 @@ const ShareSchema = v.object({
 });
 
 export async function action({ request }: Route.ActionArgs) {
-  const contentLength = Number(request.headers.get("content-length"));
-  if (contentLength > MAX_BODY_BYTES) {
-    throw new Response("Payload too large", { status: 413 });
+  const shareId = generateId();
+  const storedIds = new Set<string>();
+
+  async function cleanup() {
+    try {
+      await removeShareFiles(shareId);
+    } catch {
+      // Best effort — orphaned files are only a disk-space concern.
+    }
   }
 
-  const body = await request.text();
-  if (Buffer.byteLength(body) > MAX_BODY_BYTES) {
-    throw new Response("Payload too large", { status: 413 });
-  }
-
-  let data: unknown;
+  let formData: FormData;
   try {
-    data = JSON.parse(body);
-  } catch {
-    throw new Response("Invalid JSON", { status: 400 });
+    formData = await parseFormData(
+      request,
+      {
+        maxFileSize: MAX_FILE_SIZE,
+        maxTotalSize: MAX_UPLOAD_SIZE + MAX_CONTENT_BYTES + 1024 * 1024,
+        maxFiles: MAX_FILES,
+      },
+      async (fileUpload) => {
+        const match = FILE_FIELD.exec(fileUpload.fieldName);
+        if (!match) return null;
+        const id = match[1];
+        await fileStorage.set(fileKey(shareId, id), fileUpload);
+        storedIds.add(id);
+        return null;
+      },
+    );
+  } catch (error) {
+    await cleanup();
+    if (
+      error instanceof MaxFileSizeExceededError ||
+      error instanceof MaxTotalSizeExceededError ||
+      error instanceof MaxFilesExceededError
+    ) {
+      throw new Response("Payload too large", { status: 413 });
+    }
+    if (error instanceof FormDataParseError) {
+      throw new Response("Invalid form data", { status: 400 });
+    }
+    throw error;
   }
 
-  const result = v.safeParse(ShareSchema, data);
-  if (!result.success) {
-    throw new Response(result.issues[0].message, { status: 400 });
-  }
-  const shareData = result.output;
+  try {
+    const contentRaw = formData.get("content");
+    if (typeof contentRaw !== "string") {
+      throw new Response("Missing content", { status: 400 });
+    }
+    if (Buffer.byteLength(contentRaw) > MAX_CONTENT_BYTES) {
+      throw new Response("Payload too large", { status: 413 });
+    }
 
-  const [createdShare] = await db
-    .insert(shareTable)
-    .values({
-      id: generateId(),
+    let content: unknown;
+    try {
+      content = JSON.parse(contentRaw);
+    } catch {
+      throw new Response("Invalid JSON", { status: 400 });
+    }
+
+    const result = v.safeParse(ShareSchema, { content, expiry: formData.get("expiry") });
+    if (!result.success) {
+      throw new Response(result.issues[0].message, { status: 400 });
+    }
+    const shareData = result.output;
+
+    // Every file chip in the document must have an uploaded part; parts not
+    // referenced by any chip (deleted client-side before submit, or a
+    // hand-crafted request) are discarded.
+    const nodeIds = new Set(collectFileNodes(shareData.content).map((node) => node.id));
+    for (const id of nodeIds) {
+      if (!storedIds.has(id)) {
+        throw new Response("Missing file upload", { status: 400 });
+      }
+    }
+    for (const id of storedIds) {
+      if (!nodeIds.has(id)) {
+        await fileStorage.remove(fileKey(shareId, id));
+      }
+    }
+
+    await db.insert(shareTable).values({
+      id: shareId,
       content: shareData.content,
       expiresAt: expiryToDate(shareData.expiry),
-    })
-    .returning({ id: shareTable.id });
+    });
 
-  return redirect(`/s/${createdShare.id}`);
+    return redirect(`/s/${shareId}`);
+  } catch (error) {
+    await cleanup();
+    throw error;
+  }
 }

@@ -6,4 +6,5 @@ export default [
     route("s/", "routes/s/page.tsx"),
     route("s/:id", "routes/s/[id]/page.tsx"),
   ]),
+  route("s/:id/files/:fileId", "routes/s/[id]/files/[fileId].ts"),
 ] satisfies RouteConfig;

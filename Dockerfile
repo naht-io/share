@@ -19,7 +19,8 @@ RUN bun run build
 
 FROM base
 ENV NODE_ENV=production \
-    DB_FILE=/data/share.db
+    DB_FILE=/data/share.db \
+    FILES_DIR=/data/files
 COPY package.json bun.lock ./
 COPY --from=production-dependencies-env /app/node_modules node_modules
 COPY --from=build-env /app/build build

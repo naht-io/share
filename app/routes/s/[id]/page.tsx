@@ -59,7 +59,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   };
 }
 
-export default function SharePage({ loaderData }: Route.ComponentProps) {
+export default function SharePage({ loaderData, params }: Route.ComponentProps) {
   const share = loaderData.data;
 
   return (
@@ -75,7 +75,11 @@ export default function SharePage({ loaderData }: Route.ComponentProps) {
         </aside>
         <div className="min-w-0 space-y-4 md:col-start-2 md:row-start-2">
           <main className="border border-zinc-300 dark:border-zinc-700 shadow-sm">
-            <Editor editable={false} content={share.content as Content} />
+            <Editor
+              editable={false}
+              content={share.content as Content}
+              fileDownloadBasePath={`/s/${params.id}/files`}
+            />
           </main>
           <aside>
             <div className="flex justify-between gap-4 text-xs text-zinc-700 dark:text-zinc-300">

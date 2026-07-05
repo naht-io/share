@@ -1,3 +1,4 @@
+import { FileHandler } from "@tiptap/extension-file-handler";
 import { Placeholder } from "@tiptap/extensions";
 import {
   useEditor,
@@ -29,6 +30,7 @@ import { useEffect, useImperativeHandle, useRef, useState, type Ref } from "reac
 import { ToggleButtonGroup, Toolbar } from "react-aria-components";
 
 import { Dropdown } from "./Dropdown";
+import { FileChip } from "./FileChip";
 import { ToggleButton } from "./ToggleButton";
 
 export interface EditorProps {
@@ -36,6 +38,10 @@ export interface EditorProps {
   content?: Content;
   onCreate?: (editor: TiptapEditor) => void;
   onUpdate?: (isEmpty: TiptapEditor) => void;
+  /** Called with files dropped or pasted into the editor. `pos` is the drop position. */
+  onFiles?: (files: File[], pos?: number) => void;
+  /** Base path file chips link to on the read-only page, e.g. `/s/abc/files`. */
+  fileDownloadBasePath?: string;
   ref?: Ref<EditorHandle>;
 }
 
@@ -44,6 +50,11 @@ export interface EditorHandle {
 }
 
 export function Editor(props: EditorProps) {
+  // The extensions array is only evaluated once by useEditor, so the file
+  // callbacks read the latest onFiles through a ref to avoid stale closures.
+  const onFilesRef = useRef(props.onFiles);
+  onFilesRef.current = props.onFiles;
+
   const editor = useEditor({
     immediatelyRender: false,
     editorProps: {
@@ -55,6 +66,20 @@ export function Editor(props: EditorProps) {
       StarterKit,
       Placeholder.configure({
         placeholder: "Share something with the world...",
+      }),
+      FileChip.configure({
+        downloadBasePath: props.fileDownloadBasePath,
+      }),
+      FileHandler.configure({
+        onDrop: (_editor, files, pos) => {
+          onFilesRef.current?.(files, pos);
+        },
+        onPaste: (_editor, files, htmlContent) => {
+          // When the clipboard also carries HTML (e.g. copied rich text), let
+          // the other extensions insert that instead of duplicating the files.
+          if (htmlContent) return;
+          onFilesRef.current?.(files);
+        },
       }),
     ],
     content: props.content,

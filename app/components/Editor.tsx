@@ -34,6 +34,7 @@ import { File as FileNode } from "./tiptap/File";
 import { ToggleButton } from "./ToggleButton";
 
 export interface EditorProps {
+  autofocus?: boolean;
   editable?: boolean;
   content?: Content;
   onCreate?: (editor: TiptapEditor) => void;
@@ -56,6 +57,7 @@ export function Editor(props: EditorProps) {
   onFilesRef.current = props.onFiles;
 
   const editor = useEditor({
+    autofocus: props.autofocus,
     immediatelyRender: false,
     editorProps: {
       attributes: {

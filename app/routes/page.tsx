@@ -145,6 +145,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
           )}
         >
           <Editor
+            autofocus={true}
             ref={editorRef}
             onCreate={(editor) => setIsEmpty(editor.isEmpty)}
             onUpdate={(editor) => setIsEmpty(editor.isEmpty)}

@@ -64,6 +64,10 @@
   }
 
   hr {
-    @apply border-t border-zinc-300 dark:border-zinc-700;
+    @apply border-t border-zinc-300 dark:border-zinc-700 my-2;
+  }
+
+  a {
+    @apply cursor-pointer;
   }
 }

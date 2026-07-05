@@ -9,12 +9,12 @@ import { Editor, type EditorHandle } from "~/components/Editor";
 import { Form } from "~/components/Form";
 import { Select } from "~/components/Select";
 import { ShareExpiry } from "~/core/expiry";
-import { collectFileNodes, formatFileSize } from "~/core/files";
+import { FILE_NODE, getFileNodes, formatFileSize } from "~/core/files";
 import { generateId } from "~/core/ids";
 import type { Json } from "~/core/json";
-import { MAX_FILE_SIZE, MAX_UPLOAD_SIZE } from "~/files/index.server";
 
 import type { Route } from "./+types/page";
+import { MAX_FILE_SIZE, MAX_UPLOAD_SIZE } from "~/core/.server/files";
 
 export function meta() {
   return [{ title: "./share" }];
@@ -39,7 +39,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
   const isSubmitting = navigation.state !== "idle";
 
   function attachedSize(content: Json): number {
-    return collectFileNodes(content).reduce(
+    return getFileNodes(content).reduce(
       (sum, node) => sum + (filesRef.current.get(node.id)?.size ?? 0),
       0,
     );
@@ -65,7 +65,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
       const id = generateId();
       filesRef.current.set(id, file);
       nodes.push({
-        type: "fileChip",
+        type: FILE_NODE,
         attrs: { id, name: file.name, size: file.size, type: file.type },
       });
     }
@@ -85,7 +85,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
     if (!editor) return;
 
     const content = editor.getJSON();
-    const fileNodes = collectFileNodes(content as Json);
+    const fileNodes = getFileNodes(content as Json);
 
     const missing = fileNodes.find((node) => !filesRef.current.has(node.id));
     if (missing) {

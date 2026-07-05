@@ -1,16 +1,22 @@
 import { addDays, addMonths, addWeeks } from "date-fns";
 
-export const ShareExpiry = {
-  TOMORROW: "tomorrow",
-  THREE_DAYS: "3days",
-  ONE_WEEK: "1week",
-  ONE_MONTH: "1month",
-  NEVER: "never",
-} as const;
+/**
+ * The expiry date of a share, as sent by the client.
+ *
+ * The server parses this value to determine the expiry date of the share.
+ */
+export enum ShareExpiry {
+  TOMORROW = "tomorrow",
+  THREE_DAYS = "3days",
+  ONE_WEEK = "1week",
+  ONE_MONTH = "1month",
+  NEVER = "never",
+}
 
-export type ShareExpiryValue = (typeof ShareExpiry)[keyof typeof ShareExpiry];
-
-export function expiryToDate(expiry: ShareExpiryValue): Date {
+/**
+ * Parses a share expiry value into a `Date` object.
+ */
+export function expiryToDate(expiry: ShareExpiry): Date {
   const date = new Date();
   switch (expiry) {
     case ShareExpiry.TOMORROW:

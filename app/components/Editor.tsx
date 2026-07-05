@@ -30,7 +30,7 @@ import { useEffect, useImperativeHandle, useRef, useState, type Ref } from "reac
 import { ToggleButtonGroup, Toolbar } from "react-aria-components";
 
 import { Dropdown } from "./Dropdown";
-import { FileChip } from "./FileChip";
+import { File as FileNode } from "./tiptap/File";
 import { ToggleButton } from "./ToggleButton";
 
 export interface EditorProps {
@@ -40,7 +40,7 @@ export interface EditorProps {
   onUpdate?: (isEmpty: TiptapEditor) => void;
   /** Called with files dropped or pasted into the editor. `pos` is the drop position. */
   onFiles?: (files: File[], pos?: number) => void;
-  /** Base path file chips link to on the read-only page, e.g. `/s/abc/files`. */
+  /** Base path file nodes link to on the read-only page, e.g. `/s/abc/files`. */
   fileDownloadBasePath?: string;
   ref?: Ref<EditorHandle>;
 }
@@ -67,7 +67,7 @@ export function Editor(props: EditorProps) {
       Placeholder.configure({
         placeholder: "Share something with the world...",
       }),
-      FileChip.configure({
+      FileNode.configure({
         downloadBasePath: props.fileDownloadBasePath,
       }),
       FileHandler.configure({

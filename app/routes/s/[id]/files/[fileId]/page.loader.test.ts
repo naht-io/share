@@ -1,12 +1,13 @@
 import { describe, expect, test } from "bun:test";
 import { addDays, subDays } from "date-fns";
+import { fileKey, fileStorage } from "~/core/.server/files";
 
 import { generateId } from "~/core/ids";
 import { db } from "~/db/index.server";
 import { shareTable } from "~/db/schema.server";
-import { fileKey, fileStorage } from "~/files/index.server";
-import { loader } from "~/routes/s/[id]/files/[fileId]";
 import { catchResponse } from "~/test/utils";
+
+import { loader } from "./page";
 
 describe("s/[id]/files/[fileId]", () => {
   describe("loader", () => {

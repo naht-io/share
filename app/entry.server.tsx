@@ -3,8 +3,7 @@ import { ServerRouter } from "react-router";
 import { isbot } from "isbot";
 import { renderToReadableStream } from "react-dom/server";
 
-import "~/boot/migrate.server";
-import "~/boot/cron.server";
+import "./boot.server";
 
 export const streamTimeout = 5_000;
 

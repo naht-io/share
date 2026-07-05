@@ -9,26 +9,24 @@ import { redirect } from "react-router";
 import * as v from "valibot";
 
 import { expiryToDate, ShareExpiry } from "~/core/expiry";
-import { collectFileNodes } from "~/core/files";
+import { getFileNodes } from "~/core/files";
 import { generateId } from "~/core/ids";
 import type { Json } from "~/core/json";
 import { db } from "~/db/index.server";
 import { shareTable } from "~/db/schema.server";
+
+import type { Route } from "../s/+types/page";
 import {
   fileKey,
   fileStorage,
   MAX_FILE_SIZE,
+  MAX_FILES,
   MAX_UPLOAD_SIZE,
-  removeShareFiles,
-} from "~/files/index.server";
-
-import type { Route } from "../s/+types/page";
+  removeFiles,
+  shareKey,
+} from "~/core/.server/files";
 
 const MAX_CONTENT_BYTES = 256 * 1024;
-const MAX_FILES = 100;
-// Multipart field names for uploads are "file:<id>", where <id> comes from
-// generateId()'s nanoid alphabet.
-const FILE_FIELD = /^file:([0-9BCDFGHJ-NP-TV-Zbcdfghj-np-tv-z]{12})$/;
 
 const ShareSchema = v.object({
   content: v.pipe(
@@ -53,7 +51,7 @@ export async function action({ request }: Route.ActionArgs) {
 
   async function cleanup() {
     try {
-      await removeShareFiles(shareId);
+      await removeFiles(fileStorage, shareKey(shareId));
     } catch {
       // Best effort — orphaned files are only a disk-space concern.
     }
@@ -69,7 +67,7 @@ export async function action({ request }: Route.ActionArgs) {
         maxFiles: MAX_FILES,
       },
       async (fileUpload) => {
-        const match = FILE_FIELD.exec(fileUpload.fieldName);
+        const match = /^file:([0-9BCDFGHJ-NP-TV-Zbcdfghj-np-tv-z]{12})$/.exec(fileUpload.fieldName);
         if (!match) return null;
         const id = match[1];
         await fileStorage.set(fileKey(shareId, id), fileUpload);
@@ -117,7 +115,7 @@ export async function action({ request }: Route.ActionArgs) {
     // Every file chip in the document must have an uploaded part; parts not
     // referenced by any chip (deleted client-side before submit, or a
     // hand-crafted request) are discarded.
-    const nodeIds = new Set(collectFileNodes(shareData.content).map((node) => node.id));
+    const nodeIds = new Set(getFileNodes(shareData.content).map((node) => node.id));
     for (const id of nodeIds) {
       if (!storedIds.has(id)) {
         throw new Response("Missing file upload", { status: 400 });

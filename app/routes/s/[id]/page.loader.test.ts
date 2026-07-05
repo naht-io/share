@@ -3,8 +3,9 @@ import { afterEach, describe, expect, setSystemTime, test } from "bun:test";
 import { generateId } from "~/core/ids";
 import { db } from "~/db/index.server";
 import { shareTable } from "~/db/schema.server";
-import { loader } from "~/routes/s/[id]/page";
 import { catchResponse } from "~/test/utils";
+
+import { loader } from "./page";
 
 describe("s/[id]", () => {
   describe("loader", () => {

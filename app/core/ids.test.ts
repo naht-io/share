@@ -1,6 +1,5 @@
 import { describe, expect, test } from "bun:test";
-
-import { generateId } from "~/core/ids";
+import { generateId } from "./ids";
 
 describe("generateId", () => {
   test("should generate 12-character ids from the url-safe alphabet", () => {

@@ -2,9 +2,9 @@ import { and, eq, gt } from "drizzle-orm";
 
 import { db } from "~/db/index.server";
 import { shareTable } from "~/db/schema.server";
-import { fileKey, fileStorage } from "~/files/index.server";
+import { fileKey, fileStorage } from "~/core/.server/files";
 
-import type { Route } from "./+types/[fileId]";
+import type { Route } from "./+types/page";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const { id, fileId } = params;

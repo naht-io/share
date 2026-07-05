@@ -2,13 +2,14 @@ import { afterEach, describe, expect, setSystemTime, test } from "bun:test";
 import { eq } from "drizzle-orm";
 
 import { ShareExpiry } from "~/core/expiry";
+import { fileKey, fileStorage, MAX_FILE_SIZE, MAX_UPLOAD_SIZE } from "~/core/.server/files";
 import { generateId } from "~/core/ids";
 import type { Json } from "~/core/json";
 import { db } from "~/db/index.server";
 import { shareTable } from "~/db/schema.server";
-import { fileKey, fileStorage, MAX_FILE_SIZE, MAX_UPLOAD_SIZE } from "~/files/index.server";
-import { action } from "~/routes/s/page";
 import { catchResponse } from "~/test/utils";
+
+import { action } from "./page";
 
 describe("s/", () => {
   describe("action", () => {
@@ -199,7 +200,7 @@ function docWithChips(fileIds: string[]): Json {
   return {
     type: "doc",
     content: fileIds.map((id) => ({
-      type: "fileChip",
+      type: "file",
       attrs: { id, name: `${id}.txt`, size: 1, type: "text/plain" },
     })),
   };

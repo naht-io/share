@@ -18,7 +18,7 @@ test("can attach a file and download it from the share", async ({ page }) => {
   });
 
   // The chip shows up in the editor with a remove button.
-  const chip = editor.locator("[data-file-chip]").filter({ hasText: FILE_NAME });
+  const chip = editor.locator("[data-file]").filter({ hasText: FILE_NAME });
   await expect(chip).toBeVisible();
   await expect(chip.getByRole("button", { name: `Remove ${FILE_NAME}` })).toBeVisible();
 
@@ -26,7 +26,7 @@ test("can attach a file and download it from the share", async ({ page }) => {
   await expect(page).toHaveURL(/\/s\/.+/);
 
   // On the shared page the chip is a download link without a remove button.
-  const sharedChip = page.locator(".ProseMirror [data-file-chip]").filter({ hasText: FILE_NAME });
+  const sharedChip = page.locator(".ProseMirror [data-file]").filter({ hasText: FILE_NAME });
   await expect(sharedChip.locator("a")).toBeVisible();
   await expect(sharedChip.getByRole("button")).toHaveCount(0);
 
@@ -56,7 +56,7 @@ test("can remove an attached file before sharing", async ({ page }) => {
     buffer: Buffer.from(FILE_CONTENT),
   });
 
-  const chip = editor.locator("[data-file-chip]").filter({ hasText: FILE_NAME });
+  const chip = editor.locator("[data-file]").filter({ hasText: FILE_NAME });
   await expect(chip).toBeVisible();
   await chip.getByRole("button", { name: `Remove ${FILE_NAME}` }).click();
   await expect(chip).toHaveCount(0);
@@ -64,5 +64,5 @@ test("can remove an attached file before sharing", async ({ page }) => {
   await page.getByRole("button", { name: "Share" }).click();
   await expect(page).toHaveURL(/\/s\/.+/);
   await expect(page.locator(".ProseMirror")).toContainText("A share without its file");
-  await expect(page.locator(".ProseMirror [data-file-chip]")).toHaveCount(0);
+  await expect(page.locator(".ProseMirror [data-file]")).toHaveCount(0);
 });

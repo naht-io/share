@@ -1,6 +1,5 @@
 import { afterEach, describe, expect, setSystemTime, test } from "bun:test";
-
-import { expiryToDate, ShareExpiry } from "~/core/expiry";
+import { expiryToDate, ShareExpiry } from "./expiry";
 
 describe("expiryToDate", () => {
   // Noon UTC keeps the calendar arithmetic clear of DST boundaries.

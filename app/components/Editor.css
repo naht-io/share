@@ -68,6 +68,6 @@
   }
 
   a {
-    @apply cursor-pointer;
+    @apply cursor-pointer underline text-blue-700 dark:text-blue-500;
   }
 }

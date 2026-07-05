@@ -1,5 +1,9 @@
 import { mergeAttributes, Node } from "@tiptap/core";
-import { NodeViewWrapper, ReactNodeViewRenderer, type NodeViewProps } from "@tiptap/react";
+import {
+  NodeViewWrapper,
+  ReactNodeViewRenderer,
+  type NodeViewProps,
+} from "@tiptap/react";
 import { cx } from "class-variance-authority";
 import { PaperclipIcon, XIcon } from "lucide-react";
 
@@ -14,9 +18,8 @@ export interface FileChipOptions {
 
 export const FileChip = Node.create<FileChipOptions>({
   name: FILE_CHIP_NODE,
-  inline: true,
   atom: true,
-  group: "inline",
+  group: "block",
   draggable: true,
 
   addOptions() {
@@ -33,11 +36,11 @@ export const FileChip = Node.create<FileChipOptions>({
   },
 
   parseHTML() {
-    return [{ tag: "span[data-file-chip]" }];
+    return [{ tag: "div[data-file-chip]" }];
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ["span", mergeAttributes({ "data-file-chip": "" }, HTMLAttributes)];
+    return ["div", mergeAttributes({ "data-file-chip": "" }, HTMLAttributes)];
   },
 
   addNodeView() {
@@ -47,24 +50,26 @@ export const FileChip = Node.create<FileChipOptions>({
 
 function FileChipView({ node, editor, extension, deleteNode }: NodeViewProps) {
   const { id, name, size } = node.attrs;
-  const downloadBasePath = (extension.options as FileChipOptions).downloadBasePath;
+  const downloadBasePath = (extension.options as FileChipOptions)
+    .downloadBasePath;
 
   const className = cx(
-    "inline-flex items-center gap-1.5 align-baseline select-none",
-    "rounded-xs border border-zinc-300 dark:border-zinc-700",
-    "bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 text-sm",
+    "inline-flex items-center gap-1.5 select-none",
+    "rounded-xs",
+    "bg-zinc-200 dark:bg-zinc-800 px-1.5 py-0.5 text-sm",
   );
   const chip = (
     <>
       <PaperclipIcon className="size-3.5 shrink-0" />
       <span className="truncate max-w-64">{name}</span>
-      <span className="text-xs text-zinc-500 dark:text-zinc-400">{formatFileSize(size)}</span>
+      <span className="text-xs text-zinc-500 dark:text-zinc-400">
+        {formatFileSize(size)}
+      </span>
       {editor.isEditable && (
         <Button
           size="icon-xs"
           variant="text"
           aria-label={`Remove ${name}`}
-          className="-my-1 -me-1"
           onPress={() => deleteNode()}
         >
           <XIcon className="size-3.5" />
@@ -74,7 +79,7 @@ function FileChipView({ node, editor, extension, deleteNode }: NodeViewProps) {
   );
 
   return (
-    <NodeViewWrapper as="span" data-file-chip="">
+    <NodeViewWrapper data-file-chip="" className="my-1">
       {!editor.isEditable && downloadBasePath ? (
         <a
           href={`${downloadBasePath}/${id}`}

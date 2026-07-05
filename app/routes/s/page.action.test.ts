@@ -198,15 +198,10 @@ describe("s/", () => {
 function docWithChips(fileIds: string[]): Json {
   return {
     type: "doc",
-    content: [
-      {
-        type: "paragraph",
-        content: fileIds.map((id) => ({
-          type: "fileChip",
-          attrs: { id, name: `${id}.txt`, size: 1, type: "text/plain" },
-        })),
-      },
-    ],
+    content: fileIds.map((id) => ({
+      type: "fileChip",
+      attrs: { id, name: `${id}.txt`, size: 1, type: "text/plain" },
+    })),
   };
 }
 

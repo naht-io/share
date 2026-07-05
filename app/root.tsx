@@ -1,5 +1,6 @@
 import {
   isRouteErrorResponse,
+  Link,
   Links,
   Meta,
   Outlet,
@@ -12,6 +13,7 @@ import type { Route } from "./+types/root";
 import "@fontsource-variable/space-grotesk/wght.css";
 import "@fontsource/space-mono/400.css";
 import "./app.css";
+import { BackgroundDither } from "./components/Background";
 
 export function links() {
   return [
@@ -60,14 +62,26 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   }
 
   return (
-    <main className="pt-16 p-4 container mx-auto">
-      <h1>{message}</h1>
-      <p>{details}</p>
-      {stack && (
-        <pre className="w-full p-4 overflow-x-auto">
-          <code>{stack}</code>
-        </pre>
-      )}
-    </main>
+    <div className="flex flex-col h-screen">
+      <BackgroundDither />
+      <div className="flex-auto flex items-center justify-center p-4 md:py-24">
+        <main className="p-4 text-zinc-900 dark:text-zinc-100 space-y-2">
+          <h1 className="text-zinc-950 dark:text-zinc-50 text-9xl proportional-nums">{message}</h1>
+          <div>
+            <p>{details}</p>
+            {stack && (
+              <pre className="w-full p-4 overflow-x-auto font-mono">
+                <code>{stack}</code>
+              </pre>
+            )}
+            <p>
+              <Link to="/" className="underline">
+                Turn back, go home.
+              </Link>
+            </p>
+          </div>
+        </main>
+      </div>
+    </div>
   );
 }

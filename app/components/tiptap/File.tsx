@@ -52,7 +52,7 @@ function FileView({ node, editor, extension, deleteNode }: NodeViewProps) {
     <>
       <PaperclipIcon className="size-4 shrink-0" />
       <span className="flex items-baseline gap-1.5">
-        <span className="truncate max-w-64">{name}</span>
+        <span className="truncate max-w-48 sm:max-w-64">{name}</span>
         <span className="text-xs text-zinc-500 dark:text-zinc-400">{formatFileSize(size)}</span>
       </span>
       {editor.isEditable && (

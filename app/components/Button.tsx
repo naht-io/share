@@ -17,11 +17,7 @@ export function Button({ size, variant, className, ...rest }: ButtonProps) {
 }
 
 const buttonStyle = cva(
-  [
-    "inline-flex items-center justify-center border rounded-xs",
-    "uppercase font-light tracking-wider",
-    "transition-colors duration-100",
-  ],
+  ["inline-flex items-center justify-center border rounded-xs", "transition-colors duration-100"],
   {
     variants: {
       size: {
@@ -36,6 +32,7 @@ const buttonStyle = cva(
       variant: {
         solid: [
           "border-transparent",
+          "uppercase font-light tracking-wider",
           "bg-zinc-900 text-zinc-50 dark:bg-zinc-100 dark:text-zinc-950",
           "disabled:bg-zinc-900/30 dark:disabled:bg-zinc-100/30",
           "hover:not-disabled:bg-zinc-800 dark:hover:not-disabled:bg-zinc-300",

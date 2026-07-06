@@ -26,7 +26,7 @@ import {
 
 import "./Editor.css";
 import { AnimatePresence, motion } from "motion/react";
-import { useImperativeHandle, useRef, useState, type Ref } from "react";
+import { useImperativeHandle, useRef, useState, useSyncExternalStore, type Ref } from "react";
 import { ToggleButtonGroup, Toolbar } from "react-aria-components";
 
 import { Dropdown } from "./Dropdown";
@@ -48,6 +48,23 @@ export interface EditorProps {
 
 export interface EditorHandle {
   editor: TiptapEditor | null;
+}
+
+const COARSE_POINTER_QUERY = "(pointer: coarse)";
+
+function subscribeToCoarsePointer(onChange: () => void) {
+  const mediaQuery = window.matchMedia(COARSE_POINTER_QUERY);
+  mediaQuery.addEventListener("change", onChange);
+  return () => mediaQuery.removeEventListener("change", onChange);
+}
+
+/** Whether the primary input is a touchscreen. `false` during SSR. */
+function useIsCoarsePointer() {
+  return useSyncExternalStore(
+    subscribeToCoarsePointer,
+    () => window.matchMedia(COARSE_POINTER_QUERY).matches,
+    () => false,
+  );
 }
 
 export function Editor(props: EditorProps) {
@@ -115,6 +132,8 @@ export function Editor(props: EditorProps) {
 
   const bubbleMenuRef = useRef<HTMLDivElement>(null);
 
+  const isCoarsePointer = useIsCoarsePointer();
+
   if (!editor) {
     return (
       <div className="p-4 md:p-8">
@@ -162,6 +181,12 @@ export function Editor(props: EditorProps) {
             animatePosition ? { transition: "top 0.15s ease-out, left 0.15s ease-out" } : undefined
           }
           options={{
+            // On touch devices the OS draws its own selection toolbar
+            // (copy/search/share…) directly above the selection — the bubble
+            // menu's default spot. Place the menu below the selection there,
+            // with enough offset to clear the selection handles.
+            placement: isCoarsePointer ? "bottom" : "top",
+            offset: isCoarsePointer ? 24 : 8,
             onShow: () => {
               // The bubble menu plugin sets tabIndex=0 on its wrapper whenever
               // its view is constructed (including StrictMode's remount cycle),

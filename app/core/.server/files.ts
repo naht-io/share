@@ -31,9 +31,11 @@ export async function removeFiles(storage: typeof fileStorage, prefix: string): 
   let cursor: string | undefined;
   do {
     const result = await storage.list({ prefix, cursor });
-    for (const { key } of result.files) {
-      await storage.remove(key);
-    }
+    await Promise.all(
+      result.files.map(async ({ key }) => {
+        await storage.remove(key);
+      }),
+    );
     cursor = result.cursor;
   } while (cursor);
 }

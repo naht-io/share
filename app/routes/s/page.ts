@@ -15,7 +15,7 @@ import type { Json } from "~/core/json";
 import { db } from "~/db/index.server";
 import { shareTable } from "~/db/schema.server";
 
-import type { Route } from "../s/+types/page";
+import type { Route } from "./+types/page";
 import {
   fileKey,
   fileStorage,

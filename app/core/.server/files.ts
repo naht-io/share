@@ -32,7 +32,7 @@ export async function removeFiles(storage: typeof fileStorage, prefix: string): 
   do {
     const result = await storage.list({ prefix, cursor });
     for (const { key } of result.files) {
-      await fileStorage.remove(key);
+      await storage.remove(key);
     }
     cursor = result.cursor;
   } while (cursor);

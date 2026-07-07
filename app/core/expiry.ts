@@ -28,6 +28,7 @@ export function expiryToDate(expiry: ShareExpiry): Date {
     case ShareExpiry.ONE_MONTH:
       return addMonths(date, 1);
     case ShareExpiry.NEVER:
+      // Return a date far in the future to indicate no expiry
       return new Date("9999-11-11T00:00:00Z");
   }
 }

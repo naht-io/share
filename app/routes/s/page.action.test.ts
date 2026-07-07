@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 
 import { ShareExpiry } from "~/core/expiry";
 import { fileKey, fileStorage, MAX_FILE_SIZE, MAX_UPLOAD_SIZE } from "~/core/.server/files";
-import { generateId } from "~/core/ids";
+import { generateId } from "~/core/id";
 import type { Json } from "~/core/json";
 import { db } from "~/db/index.server";
 import { shareTable } from "~/db/schema.server";

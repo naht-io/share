@@ -10,7 +10,7 @@ import { Form } from "~/components/Form";
 import { Select } from "~/components/Select";
 import { ShareExpiry } from "~/core/expiry";
 import { FILE_NODE, getFileNodes, formatFileSize } from "~/core/files";
-import { generateId } from "~/core/ids";
+import { generateId } from "~/core/id";
 import type { Json } from "~/core/json";
 
 import type { Route } from "./+types/page";

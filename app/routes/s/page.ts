@@ -10,7 +10,7 @@ import * as v from "valibot";
 
 import { expiryToDate, ShareExpiry } from "~/core/expiry";
 import { getFileNodes } from "~/core/files";
-import { generateId } from "~/core/ids";
+import { generateId, isValidId } from "~/core/id";
 import type { Json } from "~/core/json";
 import { db } from "~/db/index.server";
 import { shareTable } from "~/db/schema.server";
@@ -67,9 +67,9 @@ export async function action({ request }: Route.ActionArgs) {
         maxFiles: MAX_FILES,
       },
       async (fileUpload) => {
-        const match = /^file:([0-9BCDFGHJ-NP-TV-Zbcdfghj-np-tv-z]{12})$/.exec(fileUpload.fieldName);
-        if (!match) return null;
-        const id = match[1];
+        if (!fileUpload.fieldName.startsWith("file:")) return null;
+        const id = fileUpload.fieldName.slice("file:".length);
+        if (!isValidId(id)) return null;
         await fileStorage.set(fileKey(shareId, id), fileUpload);
         storedIds.add(id);
         return null;

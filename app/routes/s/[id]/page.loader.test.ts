@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, setSystemTime, test } from "bun:test";
 
-import { generateId } from "~/core/ids";
+import { generateId } from "~/core/id";
 import { db } from "~/db/index.server";
 import { shareTable } from "~/db/schema.server";
 import { catchResponse } from "~/test/utils";

@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { addDays, subDays } from "date-fns";
 import { fileKey, fileStorage } from "~/core/.server/files";
 
-import { generateId } from "~/core/ids";
+import { generateId } from "~/core/id";
 import { db } from "~/db/index.server";
 import { shareTable } from "~/db/schema.server";
 import { catchResponse } from "~/test/utils";

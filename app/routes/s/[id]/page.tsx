@@ -80,53 +80,51 @@ export default function SharePage({ loaderData, params }: Route.ComponentProps) 
   const share = loaderData.data;
 
   return (
-    share && (
-      <div className="grid w-full max-w-[calc(65ch+0.25rem*20)] grid-cols-1 gap-4 md:grid-cols-[auto_1fr]">
-        <img
-          src={paperBoat}
-          alt=""
-          className="w-16 md:w-32 justify-self-start md:sticky md:top-4 rounded-xs md:col-start-1 md:row-start-2"
-        />
-        <aside className="md:col-start-2 md:row-start-1">
-          <CopyLink url={share.url} />
-        </aside>
-        <div className="min-w-0 space-y-4 md:col-start-2 md:row-start-2">
-          <main className="border border-zinc-300 dark:border-zinc-700 shadow-sm dark:shadow-black/50 bg-zinc-50 dark:bg-zinc-900">
-            <Editor
-              editable={false}
-              content={share.content as Content}
-              fileDownloadBasePath={`/s/${params.id}/files`}
-            />
-          </main>
-          <aside>
-            <div className="flex justify-between gap-4 text-xs text-zinc-700 dark:text-zinc-300">
-              <div>
-                <div title={share.expiresAt} className="font-bold">
-                  Expires {formatDistanceToNow(share.expiresAt, { addSuffix: true })}
-                </div>
-                <div title={share.createdAt}>
-                  Created {formatDistanceToNow(share.createdAt, { addSuffix: true })}
-                </div>
+    <div className="grid w-full max-w-[calc(65ch+0.25rem*20)] grid-cols-1 gap-4 md:grid-cols-[auto_1fr]">
+      <img
+        src={paperBoat}
+        alt=""
+        className="w-16 md:w-32 justify-self-start md:sticky md:top-4 rounded-xs md:col-start-1 md:row-start-2"
+      />
+      <aside className="md:col-start-2 md:row-start-1">
+        <CopyLink url={share.url} />
+      </aside>
+      <div className="min-w-0 space-y-4 md:col-start-2 md:row-start-2">
+        <main className="border border-zinc-300 dark:border-zinc-700 shadow-sm dark:shadow-black/50 bg-zinc-50 dark:bg-zinc-900">
+          <Editor
+            editable={false}
+            content={share.content as Content}
+            fileDownloadBasePath={`/s/${params.id}/files`}
+          />
+        </main>
+        <aside>
+          <div className="flex justify-between gap-4 text-xs text-zinc-700 dark:text-zinc-300">
+            <div>
+              <div title={share.expiresAt} className="font-bold">
+                Expires {formatDistanceToNow(share.expiresAt, { addSuffix: true })}
               </div>
-              <div className="text-right">
-                <div>
-                  Created with{" "}
-                  <Link
-                    to="https://github.com/naht-io/share"
-                    className="underline text-zinc-900 dark:text-zinc-200"
-                  >
-                    ./share
-                  </Link>
-                </div>
-                <NavLink to="/" className="underline text-zinc-900 dark:text-zinc-200" end>
-                  Share something else
-                </NavLink>
+              <div title={share.createdAt}>
+                Created {formatDistanceToNow(share.createdAt, { addSuffix: true })}
               </div>
             </div>
-          </aside>
-        </div>
+            <div className="text-right">
+              <div>
+                Created with{" "}
+                <Link
+                  to="https://github.com/naht-io/share"
+                  className="underline text-zinc-900 dark:text-zinc-200"
+                >
+                  ./share
+                </Link>
+              </div>
+              <NavLink to="/" className="underline text-zinc-900 dark:text-zinc-200" end>
+                Share something else
+              </NavLink>
+            </div>
+          </div>
+        </aside>
       </div>
-    )
+    </div>
   );
 }
 

@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, jest, test } from "bun:test";
+
 import { createCronJob, Interval } from "./cron";
 
 describe("createCronJob", () => {

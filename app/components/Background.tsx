@@ -1,4 +1,5 @@
 import { Dithering } from "@paper-design/shaders-react";
+
 import { useShaderFrame } from "../hooks/useShaderFrame";
 
 export function BackgroundDither() {

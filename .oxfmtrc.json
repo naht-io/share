@@ -1,4 +1,5 @@
 {
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
-  "ignorePatterns": ["drizzle/", ".agents/", ".claude/"]
+  "ignorePatterns": ["drizzle/", ".agents/", ".claude/"],
+  "sortImports": true
 }

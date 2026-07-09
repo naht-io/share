@@ -1,9 +1,11 @@
-import { migrateDb } from "~/db/migrate.server";
+import { lt } from "drizzle-orm";
+
 import { createCronJob, Interval } from "~/core/.server/cron";
+import { migrateDb } from "~/db/migrate.server";
+
+import { fileStorage, removeFiles, shareKey } from "./core/.server/files";
 import { db } from "./db/index.server";
 import { shareTable } from "./db/schema.server";
-import { lt } from "drizzle-orm";
-import { fileStorage, removeFiles, shareKey } from "./core/.server/files";
 
 // Migrate the database.
 migrateDb();

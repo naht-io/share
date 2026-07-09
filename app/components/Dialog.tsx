@@ -7,6 +7,7 @@ import {
   ModalOverlay,
   type ModalOverlayProps,
 } from "react-aria-components";
+
 import { Heading } from "./Heading";
 
 export interface DialogProps extends Omit<ModalOverlayProps, "children"> {

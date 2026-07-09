@@ -5,15 +5,22 @@ export interface FormProps extends Omit<AriaFormProps, "method" | "encType" | "a
   method?: ReactRouterFormProps["method"];
   action?: ReactRouterFormProps["action"];
   encType?: ReactRouterFormProps["encType"];
+  onInput?: ReactRouterFormProps["onInput"];
 }
 
 export function Form(props: FormProps) {
-  const { method, encType, action, ...rest } = props;
+  const { method, encType, action, onInput, ...rest } = props;
   return (
     <AriaForm
       {...rest}
       render={(renderProps) => (
-        <ReactRouterForm {...renderProps} method={method} encType={encType} action={action} />
+        <ReactRouterForm
+          {...renderProps}
+          method={method}
+          encType={encType}
+          action={action}
+          onInput={onInput}
+        />
       )}
     />
   );

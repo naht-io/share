@@ -3,6 +3,24 @@ import { Button as AriaButton, type ButtonProps as AriaButtonProps } from "react
 
 interface ButtonProps extends AriaButtonProps, VariantProps<typeof buttonStyle> {}
 
+/**
+ * A styled, accessible button built on React Aria's `Button`.
+ *
+ * Supports `size` and `variant` style options; all other React Aria
+ * `Button` props (e.g. `onPress`, `isDisabled`, `type`) are forwarded.
+ *
+ * @example
+ * ```tsx
+ * <Button variant="solid" size="md" onPress={() => save()}>
+ *   Save
+ * </Button>
+ *
+ * // Icon-only button
+ * <Button variant="text" size="icon-sm" aria-label="Delete" onPress={remove}>
+ *   <TrashIcon />
+ * </Button>
+ * ```
+ */
 export function Button({ size, variant, className, ...rest }: ButtonProps) {
   return (
     <AriaButton

@@ -1,20 +1,23 @@
 import { cx } from "class-variance-authority";
-import { MoveUpRightIcon, PaperclipIcon } from "lucide-react";
+import { FormInputIcon, MoveUpRightIcon, PaperclipIcon, PlusIcon } from "lucide-react";
 import { useRef, useState, type FormEvent } from "react";
 import { useNavigation, useSubmit } from "react-router";
 
 import paperBoat from "~/assets/paper-boat.png";
 import { Button } from "~/components/Button";
-import { Editor, type EditorHandle } from "~/components/Editor";
+import { Dropdown } from "~/components/Dropdown";
+import { Editor, type EditorHandle } from "~/components/editor/Editor";
 import { Form } from "~/components/Form";
 import { Select } from "~/components/Select";
+import { MAX_FILE_SIZE, MAX_UPLOAD_SIZE } from "~/core/.server/files";
 import { ShareExpiry } from "~/core/expiry";
-import { FILE_NODE, getFileNodes, formatFileSize } from "~/core/files";
+import { getFileNodes, formatFileSize } from "~/core/files";
+import { getFormNodes } from "~/core/forms";
 import { generateId } from "~/core/id";
 import type { Json } from "~/core/json";
+import { CustomNode } from "~/core/nodes";
 
 import type { Route } from "./+types/page";
-import { MAX_FILE_SIZE, MAX_UPLOAD_SIZE } from "~/core/.server/files";
 
 export function meta() {
   return [{ title: "./share" }];
@@ -35,7 +38,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
   // chip is still in the document are sent.
   const filesRef = useRef(new Map<string, File>());
   const [isEmpty, setIsEmpty] = useState(true);
-  const [fileError, setFileError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const isSubmitting = navigation.state !== "idle";
 
   function attachedSize(content: Json): number {
@@ -45,27 +48,40 @@ export default function Index({ loaderData }: Route.ComponentProps) {
     );
   }
 
+  function addFormNode(type: string) {
+    const editor = editorRef.current?.editor;
+    if (!editor) return;
+    editor
+      .chain()
+      .focus()
+      .insertContentAt(editor.state.selection.to, {
+        type,
+        attrs: { id: generateId(), name: "", placeholder: "", required: false },
+      })
+      .run();
+  }
+
   function attachFiles(files: File[], pos?: number) {
     const editor = editorRef.current?.editor;
     if (!editor || files.length === 0) return;
-    setFileError(null);
+    setError(null);
 
     let total = attachedSize(editor.getJSON());
     const nodes = [];
     for (const file of files) {
       if (file.size > maxFileSize) {
-        setFileError(`"${file.name}" is larger than ${formatFileSize(maxFileSize)}`);
+        setError(`"${file.name}" is larger than ${formatFileSize(maxFileSize)}`);
         continue;
       }
       if (total + file.size > maxUploadSize) {
-        setFileError(`Attachments are limited to ${formatFileSize(maxUploadSize)} in total`);
+        setError(`Attachments are limited to ${formatFileSize(maxUploadSize)} in total`);
         break;
       }
       total += file.size;
       const id = generateId();
       filesRef.current.set(id, file);
       nodes.push({
-        type: FILE_NODE,
+        type: CustomNode.FILE,
         attrs: { id, name: file.name, size: file.size, type: file.type },
       });
     }
@@ -89,11 +105,15 @@ export default function Index({ loaderData }: Route.ComponentProps) {
 
     const missing = fileNodes.find((node) => !filesRef.current.has(node.id));
     if (missing) {
-      setFileError(`Missing file data for "${missing.name}" — remove the chip and re-attach it`);
+      setError(`Missing file data for "${missing.name}" — remove the chip and re-attach it`);
       return;
     }
     if (attachedSize(content as Json) > maxUploadSize) {
-      setFileError(`Attachments are limited to ${formatFileSize(maxUploadSize)} in total`);
+      setError(`Attachments are limited to ${formatFileSize(maxUploadSize)} in total`);
+      return;
+    }
+    if (getFormNodes(content as Json).some((node) => node.name.trim() === "")) {
+      setError("Every input field needs a name — set one via its edit button");
       return;
     }
 
@@ -116,6 +136,20 @@ export default function Index({ loaderData }: Route.ComponentProps) {
         className="w-16 md:w-32 justify-self-start md:sticky md:top-4 rounded-xs md:col-start-1 md:row-start-2"
       />
       <aside className="flex justify-end md:col-start-2 md:row-start-1">
+        <Dropdown>
+          <Dropdown.Trigger size="sm" variant="text">
+            <PlusIcon />
+            Add field
+          </Dropdown.Trigger>
+          <Dropdown.Popover>
+            <Dropdown.Menu aria-label="Field type" className="*:flex *:items-center *:gap-2">
+              <Dropdown.MenuItem onAction={() => addFormNode(CustomNode.INPUT)}>
+                <FormInputIcon className="size-4" />
+                Input
+              </Dropdown.MenuItem>
+            </Dropdown.Menu>
+          </Dropdown.Popover>
+        </Dropdown>
         <input
           ref={fileInputRef}
           type="file"
@@ -148,9 +182,9 @@ export default function Index({ loaderData }: Route.ComponentProps) {
             onFiles={attachFiles}
           />
         </main>
-        {fileError && (
+        {error && (
           <p role="alert" className="text-xs text-red-600 dark:text-red-400">
-            {fileError}
+            {error}
           </p>
         )}
         <aside className="flex justify-between gap-2">

@@ -1,6 +1,6 @@
 import type { Json } from "~/core/json";
 
-export const FILE_NODE = "file";
+import { CustomNode } from "./nodes";
 
 /**
  * Formats a file size in bytes to a human-readable string.
@@ -48,7 +48,7 @@ function walk(node: Json, nodes: Map<string, FileAttrs>): void {
   if (node === null || typeof node !== "object") {
     return;
   }
-  if (node.type === FILE_NODE) {
+  if (node.type === CustomNode.FILE) {
     const attrs = node.attrs;
     if (
       attrs !== null &&

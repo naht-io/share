@@ -1,8 +1,8 @@
 import { and, eq, gt } from "drizzle-orm";
 
+import { fileKey, fileStorage } from "~/core/.server/files";
 import { db } from "~/db/index.server";
 import { shareTable } from "~/db/schema.server";
-import { fileKey, fileStorage } from "~/core/.server/files";
 
 import type { Route } from "./+types/page";
 

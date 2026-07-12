@@ -1,23 +1,29 @@
 import { Database } from "bun:sqlite";
 import { beforeEach, mock } from "bun:test";
+
 import { createMemoryFileStorage } from "@remix-run/file-storage/memory";
 import { drizzle } from "drizzle-orm/bun-sqlite";
 import { migrate } from "drizzle-orm/bun-sqlite/migrator";
 import { reset } from "drizzle-seed";
 
-import * as schema from "~/db/schema.server";
 import * as files from "~/core/.server/files";
+import * as schema from "~/db/schema.server";
 
 // Shrink the upload limits before any route module loads (they are read at
 // module scope), so oversize tests don't need to allocate 50 MB buffers.
 process.env.MAX_FILE_SIZE = String(1024 * 1024);
 process.env.MAX_UPLOAD_SIZE = String(2 * 1024 * 1024);
+// Likewise for the per-share submission cap, so hitting it stays cheap.
+process.env.MAX_SUBMISSIONS = "5";
 
 // Spin up a single in-memory database and apply the Drizzle migrations. This
 // runs before any test file is loaded, so mocking `~/db/index.server` here means
 // route modules statically imported by the tests resolve to this database
 // instead of the real `share.db`.
 const sqlite = new Database(":memory:");
+// Match the real database setup (index.server.ts): the schema relies on
+// ON DELETE CASCADE, which SQLite only honors with foreign keys enabled.
+sqlite.exec("PRAGMA foreign_keys = ON;");
 const db = drizzle({ client: sqlite });
 migrate(db, { migrationsFolder: "./drizzle" });
 mock.module("~/db/index.server", () => ({ db }));

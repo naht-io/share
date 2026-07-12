@@ -8,14 +8,6 @@ import {
 import { redirect } from "react-router";
 import * as v from "valibot";
 
-import { expiryToDate, ShareExpiry } from "~/core/expiry";
-import { getFileNodes } from "~/core/files";
-import { generateId, isValidId } from "~/core/id";
-import type { Json } from "~/core/json";
-import { db } from "~/db/index.server";
-import { shareTable } from "~/db/schema.server";
-
-import type { Route } from "./+types/page";
 import {
   fileKey,
   fileStorage,
@@ -25,6 +17,15 @@ import {
   removeFiles,
   shareKey,
 } from "~/core/.server/files";
+import { expiryToDate, ShareExpiry } from "~/core/expiry";
+import { getFileNodes } from "~/core/files";
+import { getFormNodes, maxNameLength, maxPlaceholderLength } from "~/core/forms";
+import { generateId, isValidId } from "~/core/id";
+import type { Json } from "~/core/json";
+import { db } from "~/db/index.server";
+import { shareTable } from "~/db/schema.server";
+
+import type { Route } from "./+types/page";
 
 const MAX_CONTENT_BYTES = 256 * 1024;
 
@@ -111,6 +112,19 @@ export async function action({ request }: Route.ActionArgs) {
       throw new Response(result.issues[0].message, { status: 400 });
     }
     const shareData = result.output;
+
+    // Form nodes need a well-formed id and a name to label their results;
+    // limits mirror what the editor dialog enforces client-side.
+    for (const node of getFormNodes(shareData.content)) {
+      if (
+        !isValidId(node.id) ||
+        node.name.trim() === "" ||
+        node.name.length > maxNameLength ||
+        node.placeholder.length > maxPlaceholderLength
+      ) {
+        throw new Response("Invalid form node", { status: 400 });
+      }
+    }
 
     // Every file chip in the document must have an uploaded part; parts not
     // referenced by any chip (deleted client-side before submit, or a

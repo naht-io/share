@@ -14,3 +14,18 @@ export const shareTable = sqliteTable(
   },
   (table) => [index("shares_expires_at_idx").on(table.expiresAt)],
 );
+
+export const submissionTable = sqliteTable(
+  "submissions",
+  {
+    id: int().primaryKey({ autoIncrement: true }),
+    shareId: text()
+      .notNull()
+      .references(() => shareTable.id, { onDelete: "cascade" }),
+    data: text({ mode: "json" }).$type<Json>().notNull(),
+    createdAt: int({ mode: "timestamp" })
+      .notNull()
+      .$defaultFn(() => new Date()),
+  },
+  (table) => [index("submissions_share_id_idx").on(table.shareId)],
+);

@@ -1,8 +1,9 @@
 import { afterEach, describe, expect, setSystemTime, test } from "bun:test";
+
 import { eq } from "drizzle-orm";
 
-import { ShareExpiry } from "~/core/expiry";
 import { fileKey, fileStorage, MAX_FILE_SIZE, MAX_UPLOAD_SIZE } from "~/core/.server/files";
+import { ShareExpiry } from "~/core/expiry";
 import { generateId } from "~/core/id";
 import type { Json } from "~/core/json";
 import { db } from "~/db/index.server";
@@ -95,6 +96,66 @@ describe("s/", () => {
       formData.set("expiry", ShareExpiry.TOMORROW);
       const response = await catchResponse(action(getFormDataParams(formData)));
       expect(response.status).toBe(413);
+    });
+
+    describe("with form nodes", () => {
+      test("should persist a share with a valid input node", async () => {
+        const response = await action(
+          getActionParams({
+            content: docWithInput({ name: "Your name" }),
+            expiry: ShareExpiry.TOMORROW,
+          }),
+        );
+        expect(response.status).toBe(302);
+      });
+
+      test("should 400 on an unnamed input node", async () => {
+        const response = await catchResponse(
+          action(
+            getActionParams({
+              content: docWithInput({ name: "  " }),
+              expiry: ShareExpiry.TOMORROW,
+            }),
+          ),
+        );
+        expect(response.status).toBe(400);
+      });
+
+      test("should 400 on an over-long name", async () => {
+        const response = await catchResponse(
+          action(
+            getActionParams({
+              content: docWithInput({ name: "x".repeat(201) }),
+              expiry: ShareExpiry.TOMORROW,
+            }),
+          ),
+        );
+        expect(response.status).toBe(400);
+      });
+
+      test("should 400 on an over-long placeholder", async () => {
+        const response = await catchResponse(
+          action(
+            getActionParams({
+              content: docWithInput({ name: "Name", placeholder: "x".repeat(201) }),
+              expiry: ShareExpiry.TOMORROW,
+            }),
+          ),
+        );
+        expect(response.status).toBe(400);
+      });
+
+      test("should 400 on a malformed node id", async () => {
+        const response = await catchResponse(
+          action(
+            getActionParams({
+              content: docWithInput({ id: "../evil", name: "Name" }),
+              expiry: ShareExpiry.TOMORROW,
+            }),
+          ),
+        );
+        expect(response.status).toBe(400);
+      });
     });
 
     describe("with files", () => {
@@ -195,6 +256,23 @@ describe("s/", () => {
     });
   });
 });
+
+function docWithInput(attrs: { id?: string; name: string; placeholder?: string }): Json {
+  return {
+    type: "doc",
+    content: [
+      {
+        type: "input",
+        attrs: {
+          id: attrs.id ?? generateId(),
+          name: attrs.name,
+          placeholder: attrs.placeholder ?? "",
+          required: false,
+        },
+      },
+    ],
+  };
+}
 
 function docWithChips(fileIds: string[]): Json {
   return {

@@ -1,6 +1,6 @@
 import type { Json } from "~/core/json";
 
-import { CustomNode } from "./nodes";
+import { isFormNode } from "./nodes";
 
 export const maxNameLength = 200;
 export const maxPlaceholderLength = 200;
@@ -38,7 +38,7 @@ function walk(node: Json, nodes: Map<string, FormNodeAttrs>): void {
   if (node === null || typeof node !== "object") {
     return;
   }
-  if (node.type === CustomNode.INPUT) {
+  if (typeof node.type === "string" && isFormNode(node.type)) {
     const attrs = node.attrs;
     if (
       attrs !== null &&
